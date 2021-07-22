@@ -1,68 +1,80 @@
 import * as Colyseus from "colyseus.js";
-import { Scene } from "phaser";
 import { EventNames } from "../src/scripts/utils/GameConstants";
+import { Scene } from "phaser";
+
 /**
  * @class Server
- * @description this class is pack of alll the behaviours of Server on client end
- * @override `Colyseus #Client`
+ * @description this class is pack of alll the behaviours of Server on client end.
+ * @extends Colyseus.Client
  */
 export default class Server extends Colyseus.Client {
   clientId: string;
-  scene: Scene;
-  roomName: string;
-  roomId: string;
-  isPlayerAdded: boolean;
   isEnemyAdded: boolean;
-  room: Colyseus.Room;
+  isPlayerAdded: boolean;
   players: any;
+  room: Colyseus.Room;
+  roomId: string;
+  roomName: string;
+  scene: Scene;
+
   /**
    * @constructor
-   * @param ctx [Scene] Phaser scene
+   * @description Create a new instance of this class.
+   * @param {ctx} Phaser scene.
    */
-  constructor(ctx: Scene) {
-    let url = "ws://18.224.7.66:2567";
+  constructor(scene: Scene) {
+    let url = "ws://18.224.7.66:2567"; // Comment to bottom one: with this setup it also works on localhost...
     // url = "ws://localhost:2567"; // uncomment this line to make it work locally
     super(url);
-    this.scene = ctx;
+
+    // Set up initial values.
     this.clientId = "";
+    this.isEnemyAdded = false;
+    this.isPlayerAdded = false;
+    this.players = {};
+    this.scene = scene;
     this.roomName = "";
     this.roomId = "";
-    this.isPlayerAdded = false;
-    this.isEnemyAdded = false;
-    // this.connect();
-    this.addListeners();
-    this.players = {};
+
+    this.addListeners(); // Add listeners of the game objects.
   }
 
   /**
-   * @function addListeners
-   * @description this function includes all the listeners of this game object
    * @access private
+   * @description Add listeners of the game objects.
+   * @function addListeners
+   * @returns {void}
    */
-  private addListeners() {
-    this.scene.events.on(EventNames.MOVE, this.onMovePlayer, this);
-    this.scene.events.on(EventNames.ROTATE, this.onRotatePlayer, this);
-    this.scene.events.on(EventNames.MOVE_DOWN, this.onMovePlayerDown, this);
-    this.scene.events.on(EventNames.MOVE_UP, this.onMovePlayerUp, this);
-    this.scene.events.on(EventNames.MOVE_RIGHT, this.onMovePlayerRight, this);
-    this.scene.events.on(EventNames.MOVE_LEFT, this.onMovePlayerLeft, this);
-    this.scene.events.on(EventNames.BULLET, this.onFire, this);
-    this.scene.events.on(EventNames.PLAYER_DEAD, this.onPlayerDead, this);
-    this.scene.events.on(EventNames.ENEMY_DEAD, this.onEnemyDead, this);
+  private addListeners(): void {
+    this.scene.events.on(EventNames.BULLET, this.onFire, this); // Listener for firing bullet event.
+    this.scene.events.on(EventNames.ENEMY_DEAD, this.onEnemyDead, this); // Listener for enemy dead event after the player hits the enemy.
+    this.scene.events.on(EventNames.MOVE, this.onMovePlayer, this); // Listener for player move event.
+    this.scene.events.on(EventNames.MOVE_DOWN, this.onMovePlayerDown, this); // Listener for player move down event.
+    this.scene.events.on(EventNames.MOVE_LEFT, this.onMovePlayerLeft, this); // Listener for player move left event.
+    this.scene.events.on(EventNames.MOVE_RIGHT, this.onMovePlayerRight, this); // Listener for player move right event.
+    this.scene.events.on(EventNames.MOVE_UP, this.onMovePlayerUp, this); // Listener for player move up event.
+    this.scene.events.on(EventNames.PLAYER_DEAD, this.onPlayerDead, this); // Listener for player dead event after the enemy hits the player.
+    this.scene.events.on(EventNames.ROTATE, this.onRotatePlayer, this); // Listener for rotate player event.
   }
 
   /**
-   * @function connect
-   * @description this function is responsible for establishing the connection between client and server
    * @access public
+   * @async
+   * @description Establish connection between client and server.
+   * @function connect
+   * @returns {Promise<void>}
    */
-  public connect() {
+  public async connect(): Promise<void> {
+    // Set game dimensions .
     let options = {
-      gameWidth: this.scene.game.config.width,
       gameHeight: this.scene.game.config.height,
+      gameWidth: this.scene.game.config.width,
     };
-    // will join room if exists else will create and join (Colyseus#joinOrCreate)
-    this.joinOrCreate("my_room", options).then(this.onRoomJoin.bind(this));
+
+    // Join room if exists else will create and join. The class extends Colyseus.Client and therefore there's an access on "this" to Colyseus#joinOrCreate.
+    await this.joinOrCreate("my_room", options).then(
+      this.onRoomJoin.bind(this)
+    );
   }
 
   /**
@@ -72,7 +84,6 @@ export default class Server extends Colyseus.Client {
    * @access private
    */
   private onRoomJoin(room: Colyseus.Room) {
-    // console.log('room :>> ', room);
     this.room = room;
     this.clientId = room.sessionId;
     this.roomId = room.id;
@@ -89,16 +100,13 @@ export default class Server extends Colyseus.Client {
    * @access private
    */
   private onStateChange(state: any) {
-    // console.log('state change', state);
     for (const key in state) {
       if (state.hasOwnProperty(key)) {
         const value = state[key];
-        // console.log('stateField.value :>> ', key, value);
         switch (key) {
           case "players":
             this.playersState(value);
             break;
-
           default:
             break;
         }
@@ -113,16 +121,13 @@ export default class Server extends Colyseus.Client {
    * @access private
    */
   private onStateChangeOnce(state: any) {
-    // console.log('onstateChange :>>>>>>>>>>>>>>>>>>> ');
     for (const key in state) {
       if (state.hasOwnProperty(key)) {
         const value = state[key];
-        // console.log('stateField.value :>> ', key, value);
         switch (key) {
           case "players":
             this.playersState(value);
             break;
-
           default:
             break;
         }
@@ -202,87 +207,95 @@ export default class Server extends Colyseus.Client {
   }
 
   /**
-   * @function onMovePlayer
-   * @description this function will be executed on move player event
-   * @param {any} [pos] -positions of player
    * @access private
-   */
-  private onMovePlayer(pos: any) {
-    this.room.send(EventNames.MOVE, pos);
-  }
-
-  /**
-   * @function onRotatePlayer
-   * @description this function will be executed on rotate player event
-   * @param {any} [pos] -rotations of player
-   * @access private
-   */
-  private onRotatePlayer(pos: any) {
-    this.room.send(EventNames.ROTATE, pos);
-  }
-
-  /**
+   * @description Listener for firing bullet event.
    * @function onFire
-   * @description this function will be executed on player fire event
-   * @param {any} [pos] -positions of player
-   * @access private
+   * @param {any} position Position of the player.
+   * @returns {void}
    */
-  private onFire(pos: any) {
-    this.room.send(EventNames.BULLET, pos);
+  private onFire(position: any): void {
+    this.room.send(EventNames.BULLET, position); // Send a type of "PLAYER_DEAD" message to the room handler with a position of the player.
   }
 
   /**
-   * @function onPlayerDead
-   * @description this function will be executed on player got hit
    * @access private
-   */
-  private onPlayerDead() {
-    this.room.send(EventNames.PLAYER_DEAD);
-  }
-
-  /**
+   * @description Listener for enemy dead event after the player hits the enemy.
    * @function onEnemyDead
-   * @description this function will be executed on player fired enemy
-   * @access private
+   * @returns {void}
    */
-  private onEnemyDead() {
-    this.room.send(EventNames.ENEMY_DEAD);
+  private onEnemyDead(): void {
+    this.room.send(EventNames.ENEMY_DEAD); // Send a type of "ENEMY_DEAD" message to the room handler.
   }
 
   /**
+   * @access private
+   * @description Listener for player move event.
+   * @function onMovePlayer
+   * @param {any} position Position of the player.
+   * @returns {void}
+   */
+  private onMovePlayer(position: any): void {
+    this.room.send(EventNames.MOVE, position); // Send a type of "MOVE" message to the room handler with a position of the player.
+  }
+
+  /**
+   * @access private
+   * @description Listener for player move down event.
    * @function onMovePlayerDown
-   * @description this function will be executed on move player down player event
-   * @access private
+   * @returns {void}
    */
-  private onMovePlayerDown() {
-    this.room.send(EventNames.MOVE_DOWN);
+  private onMovePlayerDown(): void {
+    this.room.send(EventNames.MOVE_DOWN); // Send a type of "MOVE_DOWN" message to the room handler.
   }
 
   /**
-   * @function onMovePlayerUp
-   * @description this function will be executed on move player up event
    * @access private
-   */
-  private onMovePlayerUp() {
-    this.room.send(EventNames.MOVE_UP);
-  }
-
-  /**
+   * @description Listener for player move left event.
    * @function onMovePlayerLeft
-   * @description this function will be executed on move player left event
-   * @access private
+   * @returns {void}
    */
-  private onMovePlayerLeft() {
-    this.room.send(EventNames.MOVE_LEFT);
+  private onMovePlayerLeft(): void {
+    this.room.send(EventNames.MOVE_LEFT); // Send a type of "MOVE_LEFT" message to the room handler.
   }
 
   /**
-   * @function onMovePlayerRight
-   * @description this function will be executed on move player right event
    * @access private
+   * @description Listener for player move right event.
+   * @function onMovePlayerRight
+   * @returns {void}
    */
-  private onMovePlayerRight() {
-    this.room.send(EventNames.MOVE_RIGHT);
+  private onMovePlayerRight(): void {
+    this.room.send(EventNames.MOVE_RIGHT); // Send a type of "MOVE_RIGHT" message to the room handler.
+  }
+
+  /**
+   * @access private
+   * @description Listener for player move up event.
+   * @function onMovePlayerUp
+   * @returns {void}
+   */
+  private onMovePlayerUp(): void {
+    this.room.send(EventNames.MOVE_UP); // Send a type of "MOVE_UP" message to the room handler.
+  }
+
+  /**
+   * @access private
+   * @description Listener for player dead event after the enemy hits the player.
+   * @function onPlayerDead
+   * @returns {void}
+   */
+  private onPlayerDead(): void {
+    this.room.send(EventNames.PLAYER_DEAD); // Send a type of "PLAYER_DEAD" message to the room handler.
+  }
+
+  /**
+   * @access private
+   * @description Listener for rotate player event.
+   * @function onRotatePlayer
+   * @param {any} position Position of the player.
+   */
+  private onRotatePlayer(position: any) {
+    this.room.send(EventNames.ROTATE, position); // Send a type of "ROTATE" message to the room handler with a position of the player.
   }
 
   /**
@@ -341,21 +354,17 @@ export default class Server extends Colyseus.Client {
    * @access private
    */
   private correctPositionEnemy(element) {
-    // console.log('element :>> ', element);
     if (
       this.players[element.id].x == element.x &&
       this.players[element.id].y == element.y
     ) {
     } else {
       let timestamp = +new Date();
-      let pos = {
+      let position = {
         x: element.x,
         y: element.y,
       };
-      this.players[element.id].positionBuffer.push([timestamp, pos]);
-      // this.players[element.id].targetX = element.x;
-      // this.players[element.id].targetY = element.y;
-      // this.players[element.id].onEnemyMoved();
+      this.players[element.id].positionBuffer.push([timestamp, position]);
     }
   }
 }
