@@ -1,172 +1,153 @@
-{"frames": {
-
-"shipBeige.png":
 {
-	"frame": {"x":0,"y":0,"w":124,"h":67},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":67},
-	"sourceSize": {"w":124,"h":67}
-},
-"shipBeige_damage1.png":
-{
-	"frame": {"x":0,"y":67,"w":124,"h":67},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":67},
-	"sourceSize": {"w":124,"h":67}
-},
-"shipBeige_damage2.png":
-{
-	"frame": {"x":0,"y":134,"w":124,"h":67},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":67},
-	"sourceSize": {"w":124,"h":67}
-},
-"shipBeige_manned.png":
-{
-	"frame": {"x":0,"y":201,"w":124,"h":122},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":122},
-	"sourceSize": {"w":124,"h":122}
-},
-"shipBlue.png":
-{
-	"frame": {"x":0,"y":323,"w":124,"h":90},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":90},
-	"sourceSize": {"w":124,"h":90}
-},
-"shipBlue_damage1.png":
-{
-	"frame": {"x":0,"y":413,"w":124,"h":90},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":90},
-	"sourceSize": {"w":124,"h":90}
-},
-"shipBlue_damage2.png":
-{
-	"frame": {"x":0,"y":503,"w":124,"h":90},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":90},
-	"sourceSize": {"w":124,"h":90}
-},
-"shipBlue_manned.png":
-{
-	"frame": {"x":0,"y":593,"w":124,"h":145},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":145},
-	"sourceSize": {"w":124,"h":145}
-},
-"shipGreen.png":
-{
-	"frame": {"x":0,"y":738,"w":124,"h":68},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":68},
-	"sourceSize": {"w":124,"h":68}
-},
-"shipGreen_damage1.png":
-{
-	"frame": {"x":0,"y":806,"w":124,"h":68},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":68},
-	"sourceSize": {"w":124,"h":68}
-},
-"shipGreen_damage2.png":
-{
-	"frame": {"x":0,"y":874,"w":124,"h":68},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":68},
-	"sourceSize": {"w":124,"h":68}
-},
-"shipGreen_manned.png":
-{
-	"frame": {"x":0,"y":942,"w":124,"h":123},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":123},
-	"sourceSize": {"w":124,"h":123}
-},
-"shipPink.png":
-{
-	"frame": {"x":0,"y":1065,"w":124,"h":72},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":72},
-	"sourceSize": {"w":124,"h":72}
-},
-"shipPink_damage.png":
-{
-	"frame": {"x":0,"y":1137,"w":124,"h":72},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":72},
-	"sourceSize": {"w":124,"h":72}
-},
-"shipPink_damage1.png":
-{
-	"frame": {"x":0,"y":1209,"w":124,"h":72},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":72},
-	"sourceSize": {"w":124,"h":72}
-},
-"shipPink_manned.png":
-{
-	"frame": {"x":0,"y":1281,"w":124,"h":127},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":127},
-	"sourceSize": {"w":124,"h":127}
-},
-"shipYellow.png":
-{
-	"frame": {"x":0,"y":1408,"w":124,"h":62},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":62},
-	"sourceSize": {"w":124,"h":62}
-},
-"shipYellow_damage1.png":
-{
-	"frame": {"x":0,"y":1470,"w":124,"h":62},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":62},
-	"sourceSize": {"w":124,"h":62}
-},
-"shipYellow_damage2.png":
-{
-	"frame": {"x":0,"y":1532,"w":124,"h":62},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":62},
-	"sourceSize": {"w":124,"h":62}
-},
-"shipYellow_manned.png":
-{
-	"frame": {"x":0,"y":1594,"w":124,"h":108},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":108},
-	"sourceSize": {"w":124,"h":108}
-}},
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.0",
-	"image": "ship.png",
-	"format": "RGBA8888",
-	"size": {"w":124,"h":1702},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:928dc5aeb05aace5b26fa6f08f000443:5a3522de34401cbc851fcece6d0f576c:25d6acd8d4906c9ff490804d476da0a8$"
-}
+  "frames": {
+    "shipBeige.png": {
+      "frame": { "x": 0, "y": 0, "w": 124, "h": 67 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 124, "h": 67 },
+      "sourceSize": { "w": 124, "h": 67 }
+    },
+    "shipBeige_damage1.png": {
+      "frame": { "x": 0, "y": 67, "w": 124, "h": 67 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 124, "h": 67 },
+      "sourceSize": { "w": 124, "h": 67 }
+    },
+    "shipBeige_damage2.png": {
+      "frame": { "x": 0, "y": 134, "w": 124, "h": 67 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 124, "h": 67 },
+      "sourceSize": { "w": 124, "h": 67 }
+    },
+    "shipBeige_manned.png": {
+      "frame": { "x": 0, "y": 201, "w": 124, "h": 122 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 124, "h": 122 },
+      "sourceSize": { "w": 124, "h": 122 }
+    },
+    "shipBlue.png": {
+      "frame": { "x": 0, "y": 323, "w": 124, "h": 90 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 124, "h": 90 },
+      "sourceSize": { "w": 124, "h": 90 }
+    },
+    "shipBlue_damage1.png": {
+      "frame": { "x": 0, "y": 413, "w": 124, "h": 90 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 124, "h": 90 },
+      "sourceSize": { "w": 124, "h": 90 }
+    },
+    "shipBlue_damage2.png": {
+      "frame": { "x": 0, "y": 503, "w": 124, "h": 90 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 124, "h": 90 },
+      "sourceSize": { "w": 124, "h": 90 }
+    },
+    "shipBlue_manned.png": {
+      "frame": { "x": 0, "y": 593, "w": 124, "h": 145 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 124, "h": 145 },
+      "sourceSize": { "w": 124, "h": 145 }
+    },
+    "shipGreen.png": {
+      "frame": { "x": 0, "y": 738, "w": 124, "h": 68 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 124, "h": 68 },
+      "sourceSize": { "w": 124, "h": 68 }
+    },
+    "shipGreen_damage1.png": {
+      "frame": { "x": 0, "y": 806, "w": 124, "h": 68 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 124, "h": 68 },
+      "sourceSize": { "w": 124, "h": 68 }
+    },
+    "shipGreen_damage2.png": {
+      "frame": { "x": 0, "y": 874, "w": 124, "h": 68 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 124, "h": 68 },
+      "sourceSize": { "w": 124, "h": 68 }
+    },
+    "shipGreen_manned.png": {
+      "frame": { "x": 0, "y": 942, "w": 124, "h": 123 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 124, "h": 123 },
+      "sourceSize": { "w": 124, "h": 123 }
+    },
+    "shipPink.png": {
+      "frame": { "x": 0, "y": 1065, "w": 124, "h": 72 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 124, "h": 72 },
+      "sourceSize": { "w": 124, "h": 72 }
+    },
+    "shipPink_damage.png": {
+      "frame": { "x": 0, "y": 1137, "w": 124, "h": 72 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 124, "h": 72 },
+      "sourceSize": { "w": 124, "h": 72 }
+    },
+    "shipPink_damage1.png": {
+      "frame": { "x": 0, "y": 1209, "w": 124, "h": 72 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 124, "h": 72 },
+      "sourceSize": { "w": 124, "h": 72 }
+    },
+    "shipPink_manned.png": {
+      "frame": { "x": 0, "y": 1281, "w": 124, "h": 127 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 124, "h": 127 },
+      "sourceSize": { "w": 124, "h": 127 }
+    },
+    "shipYellow.png": {
+      "frame": { "x": 0, "y": 1408, "w": 124, "h": 62 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 124, "h": 62 },
+      "sourceSize": { "w": 124, "h": 62 }
+    },
+    "shipYellow_damage1.png": {
+      "frame": { "x": 0, "y": 1470, "w": 124, "h": 62 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 124, "h": 62 },
+      "sourceSize": { "w": 124, "h": 62 }
+    },
+    "shipYellow_damage2.png": {
+      "frame": { "x": 0, "y": 1532, "w": 124, "h": 62 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 124, "h": 62 },
+      "sourceSize": { "w": 124, "h": 62 }
+    },
+    "shipYellow_manned.png": {
+      "frame": { "x": 0, "y": 1594, "w": 124, "h": 108 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 124, "h": 108 },
+      "sourceSize": { "w": 124, "h": 108 }
+    }
+  },
+  "meta": {
+    "app": "https://www.codeandweb.com/texturepacker",
+    "version": "1.0",
+    "image": "ship.png",
+    "format": "RGBA8888",
+    "size": { "w": 124, "h": 1702 },
+    "scale": "1",
+    "smartupdate": "$TexturePacker:SmartUpdate:928dc5aeb05aace5b26fa6f08f000443:5a3522de34401cbc851fcece6d0f576c:25d6acd8d4906c9ff490804d476da0a8$"
+  }
 }

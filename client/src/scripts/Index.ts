@@ -5,10 +5,8 @@ import GamePlayScene from "./scenes/gameplay/GamePlayScene";
  * @class Game
  * @description Create the game canvas with respective options that are given
  */
-class Game extends Phaser.Game
-{
-  constructor()
-  {
+class Game extends Phaser.Game {
+  constructor() {
     const game_config: Phaser.Types.Core.GameConfig = {
       type: Phaser.WEBGL, // Use Renderer WebGL.
       width: 1280,
@@ -30,8 +28,7 @@ class Game extends Phaser.Game
 }
 
 // Create the game object once window loaded.
-window.onload = () =>
-{
+window.onload = () => {
   window.focus(); // focus the game tab right after loading
   new Game();
 };

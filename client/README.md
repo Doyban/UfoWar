@@ -38,8 +38,8 @@ Note : before executing the client server run the colyseus server using **Run Se
 
 ### 4. Run Server
 
-  - Goto the Server folder and run the command 
-    
-    `npm run start`
+- Goto the Server folder and run the command
 
-    to initiate the server for localhost
+  `npm run start`
+
+  to initiate the server for localhost
