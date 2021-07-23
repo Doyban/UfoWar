@@ -81,7 +81,7 @@ export default class Server extends Colyseus.Client {
    * @access private
    * @description Configure room properties and listen to room's changes once the client will join the room successfully.
    * @function onRoomJoin
-   * @param {any} [room]
+   * @param {any} [room] communication channel to implement game session, and/or serve as the communication channel between a group of clients.
    * @returns {void}
    */
   private onRoomJoin(room: Colyseus.Room): void {
@@ -92,14 +92,14 @@ export default class Server extends Colyseus.Client {
     this.roomName = room.name;
 
     room.onStateChange(this.onStateChange.bind(this, room.state)); // Colyseus' callback that will be called if state has any change, it syncs moves.
-    room.onMessage("*", this.onMessage.bind(this)); // Colyseus' callback that will be called on all room's messages from the server.
+    room.onMessage("*", this.onMessage.bind(this)); // Colyseus' callback that will be called on all room's messages from the server and based on message type update adequate action.
   }
 
   /**
    * @access private
    * @description Listen to state changes on server side, it syncs moves.
    * @function onStateChange
-   * @param {any} [state]
+   * @param {any} [state] state of the player
    * @returns {void}
    */
   private onStateChange(state: any): void {
@@ -118,29 +118,29 @@ export default class Server extends Colyseus.Client {
   }
 
   /**
-   * @function onMessage
-   * @description this function will be executed on message from server
-   * @param {any} [type] -message name
-   * @param {any} [message] -message data
    * @access private
+   * @description Listen to all room's messages from the server and based on message type update adequate action.
+   * @function onMessage
+   * @param {any} [message] - message data
+   * @param {any} [type] - message type
+   * @returns {void}
    */
-  private onMessage(type: any, message: any): void {
-    // console.log('res :>> ', type, message);
+  private onMessage(message: any, type: any): void {
     switch (type) {
       case EventNames.PLAYER_LEFT:
-        this.onPlayerLeft(type, message);
+        this.onPlayerLeft(type, message); // Update gameplay after the player will leave the game.
         break;
       case EventNames.NEW_PLAYER_JOINED:
-        this.newPlayerJoin(type, message);
+        this.newPlayerJoin(type, message); // Update gameplay after the player will join the game.
         break;
       case EventNames.BULLET:
-        this.scene.events.emit(EventNames.ENEMY_BULLET, message);
+        this.scene.events.emit(EventNames.ENEMY_BULLET, message); // Emit "ENEMY_BULLET" event to the scene with message data.
         break;
       case EventNames.ROTATE:
-        this.scene.events.emit(EventNames.ENEMY_ROTATE, message);
+        this.scene.events.emit(EventNames.ENEMY_ROTATE, message); // Emit "ENEMY_ROTATE" event to the scene with message data.
         break;
       case EventNames.ASTROID_ADDED:
-        this.scene.events.emit(EventNames.ASTROID_ADDED, message);
+        this.scene.events.emit(EventNames.ASTROID_ADDED, message); // Emit "ASTROID_ADDED" event to the scene with message data.
         break;
 
       default:
@@ -281,9 +281,9 @@ export default class Server extends Colyseus.Client {
   }
 
   /**
-   * @function onPlayerLeft
-   * @description this function will be executed on any plyer left the room
    * @access private
+   * @function onPlayerLeft
+   * @description Update gameplay after the player will leave the game.
    */
   private onPlayerLeft(type: string, value: any) {
     this.isEnemyAdded = false;
@@ -292,11 +292,11 @@ export default class Server extends Colyseus.Client {
   }
 
   /**
+   * @access private
    * @function newPlayerJoin
-   * @description this function will be executed on move player event
+   * @description Update gameplay after the player will join the game
    * @param {any} [type] -message type
    * @param {any} [value] -message value
-   * @access private
    */
   private newPlayerJoin(type: string, value: any) {
     this.isEnemyAdded = true;
