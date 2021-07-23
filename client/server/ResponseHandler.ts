@@ -92,7 +92,6 @@ export default class Server extends Colyseus.Client {
     this.roomName = room.name;
 
     room.onStateChange(this.onStateChange.bind(this, room.state)); // Colyseus' callback that will be called if state has any change, it syncs moves.
-    room.onStateChange.once(this.onStateChangeOnce.bind(this, room.state));
     room.onMessage("*", this.onMessage.bind(this)); // Colyseus' callback that will be called on all room's messages from the server.
   }
 
@@ -110,27 +109,6 @@ export default class Server extends Colyseus.Client {
         switch (key) {
           case "players":
             this.playersState(value); // Update Player's state based on given value from the state.
-            break;
-          default:
-            break;
-        }
-      }
-    }
-  }
-
-  /**
-   * @function onStateChangeOnce
-   * @description this function will be executed once and first time that state change happens
-   * @param {any} [state]
-   * @access private
-   */
-  private onStateChangeOnce(state: any) {
-    for (const key in state) {
-      if (state.hasOwnProperty(key)) {
-        const value = state[key];
-        switch (key) {
-          case "players":
-            this.playersState(value);
             break;
           default:
             break;
