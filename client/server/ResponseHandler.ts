@@ -20,10 +20,10 @@ export default class Server extends Colyseus.Client {
   /**
    * @constructor
    * @description Create a new instance of this class.
-   * @param {ctx} Phaser scene.
+   * @param {ctx} [] Phaser scene.
    */
   constructor(scene: Scene) {
-    let url = "ws://18.224.7.66:2567"; // Comment to bottom one: with this setup it also works on localhost...
+    let url: string = "ws://18.224.7.66:2567"; // Comment to bottom one: with this setup it also works on localhost...
     // url = "ws://localhost:2567"; // uncomment this line to make it work locally
     super(url);
 
@@ -99,16 +99,16 @@ export default class Server extends Colyseus.Client {
    * @access private
    * @description Listen to state changes on server side, it syncs moves.
    * @function onStateChange
-   * @param {any} [state] state of the player
+   * @param {any} [state] state of the Player
    * @returns {void}
    */
   private onStateChange(state: any): void {
     for (const key in state) {
       if (state.hasOwnProperty(key)) {
-        const value = state[key];
+        const value: any = state[key];
         switch (key) {
           case "players":
-            this.playersState(value); // Update Player's state based on given value from the state.
+            this.playersState(value); // Update Player's state based on current state of the game on server end.
             break;
           default:
             break;
@@ -121,8 +121,8 @@ export default class Server extends Colyseus.Client {
    * @access private
    * @description Listen to all room's messages from the server and based on message type update adequate action.
    * @function onMessage
-   * @param {any} [message] - message data
-   * @param {any} [type] - message type
+   * @param {any} [message] message data
+   * @param {any} [type] message type
    * @returns {void}
    */
   private onMessage(message: any, type: any): void {
@@ -142,46 +142,58 @@ export default class Server extends Colyseus.Client {
       case EventNames.ASTROID_ADDED:
         this.scene.events.emit(EventNames.ASTROID_ADDED, message); // Emit "ASTROID_ADDED" event to the scene with message data.
         break;
-
       default:
         break;
     }
   }
 
   /**
-   * @function playersState
-   * @description this function will be called on change in state on server
-   * @param {any} [currentState] - current state of the game on server end
    * @access private
+   * @description Update Player's state based on current state of the game on server end.
+   * @function playersState
+   * @param {any} [currentState] current state of the game on server end
+   * @returns {void}
    */
-  private playersState(currentState: any) {
+  private playersState(currentState: any): void {
     for (const key in currentState) {
       if (currentState.hasOwnProperty(key)) {
-        const element = currentState[key];
-        let prop = {
+        const element: any = currentState[key]; // Get single element from the state.
+
+        // Get all required properties from the element.
+        const elementProperties = {
+          bullets: element.bullets,
           id: key,
+          rotation: element.rotation,
           x: element.x,
           y: element.y,
-          rotation: element.rotation,
-          bullets: element.bullets,
         };
+
+        // Check the element if that's a Player.
         if (key === this.clientId) {
-          let playerProp = prop;
+          const playerProperties = elementProperties; // Assign element's properties to Player properties.
+
+          // Check if player added already if not, add now.
           if (!this.isPlayerAdded) {
-            // check if player added already if not, add now
-            this.scene.events.emit(EventNames.HERO_ADDED, playerProp); // emit an event to add player gameobject to the scene
+            this.scene.events.emit(EventNames.HERO_ADDED, playerProperties); // Emit "HERO_ADDED" event to the scene with Player properties.
             this.isPlayerAdded = true;
           } else {
-            this.correctPositionOfPlayer(element); // sync player position with server
+            this.correctPositionOfPlayer(element); // Sync Player position with server.
           }
-        } else {
-          let enemyProp = prop;
+        }
+        // The element that's not a Player, therefore that's an Enemy.
+        else {
+          const enemyProperties = elementProperties; // Assign element's properties to Enemy properties.
+          // Check if enemy added already if not, add now.
           if (!this.isEnemyAdded) {
-            // if enemy not added yet, add now
-            this.scene.events.emit(EventNames.NEW_PLAYER_JOINED, enemyProp); // emit an event to add enemy game object to scene
+            // Emit "NEW_PLAYER_JOINED" event to the scene with Enemy properties.
+            this.scene.events.emit(
+              EventNames.NEW_PLAYER_JOINED,
+              enemyProperties
+            );
+
             this.isEnemyAdded = true;
           } else {
-            this.correctPositionEnemy(element); // sync enemy position with server
+            this.correctPositionEnemy(element); // Sync enemy position with server.
           }
         }
       }
@@ -306,7 +318,7 @@ export default class Server extends Colyseus.Client {
 
   /**
    * @function correctPositionOfPlayer
-   * @description will be responsible to sync player position with server
+   * @description Sync player position with server.
    * @param element player state object
    * @access private
    */
@@ -331,7 +343,7 @@ export default class Server extends Colyseus.Client {
 
   /**
    * @function correctPositionEnemy
-   * @description will be responsible to sync enemy position with server
+   * @description Sync enemy position with server.
    * @param element enemy state object
    * @access private
    */
