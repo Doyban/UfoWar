@@ -20,7 +20,7 @@ export default class Server extends Colyseus.Client {
   /**
    * @constructor
    * @description Create a new instance of this class.
-   * @param {ctx} [] Phaser scene.
+   * @param {Scene} [scene] Phaser scene.
    */
   constructor(scene: Scene) {
     let url: string = "ws://18.224.7.66:2567"; // Comment to bottom one: with this setup it also works on localhost...
@@ -204,7 +204,7 @@ export default class Server extends Colyseus.Client {
    * @access private
    * @description Listener for firing Bullet event.
    * @function onFire
-   * @param {any} position Position of the Player.
+   * @param {any} [position] position of the Player.
    * @returns {void}
    */
   private onFire(position: any): void {
@@ -225,7 +225,7 @@ export default class Server extends Colyseus.Client {
    * @access private
    * @description Listener for Player move event.
    * @function onMovePlayer
-   * @param {any} position Position of the Player.
+   * @param {any} [position] position of the Player.
    * @returns {void}
    */
   private onMovePlayer(position: any): void {
@@ -286,7 +286,7 @@ export default class Server extends Colyseus.Client {
    * @access private
    * @description Listener for rotate Player event.
    * @function onRotatePlayer
-   * @param {any} position Position of the Player.
+   * @param {any} [position] position of the Player
    */
   private onRotatePlayer(position: any) {
     this.room.send(EventNames.ROTATE, position); // Send a type of "ROTATE" message to the room handler with a position of the Player.
@@ -294,35 +294,39 @@ export default class Server extends Colyseus.Client {
 
   /**
    * @access private
-   * @function onPlayerLeft
    * @description Update gameplay after the player will leave the game.
+   * @function onPlayerLeft
+   * @param {string} [type] message type
+   * @param {any} [value] message value
+   * @returns {void}
    */
-  private onPlayerLeft(type: string, value: any) {
-    this.isEnemyAdded = false;
-    this.scene.events.emit(type);
-    delete this.players[value.sessionId];
+  private onPlayerLeft(type: string, value: any): void {
+    this.isEnemyAdded = false; // Enemy is gone as well with the Player (Player can't play alone).
+    this.scene.events.emit(type); // Emit event to the scene with message type.
+    delete this.players[value.sessionId]; // Delete player from the game.
   }
 
   /**
    * @access private
+   * @description Update gameplay after the player will join the game.
    * @function newPlayerJoin
-   * @description Update gameplay after the player will join the game
-   * @param {any} [type] -message type
-   * @param {any} [value] -message value
+   * @param {any} [string] message type
+   * @param {any} [value] message value
+   * @returns {void}
    */
-  private newPlayerJoin(type: string, value: any) {
-    this.isEnemyAdded = true;
-    value["player"]["id"] = value["client"]["sessionId"];
-    this.scene.events.emit(type, value.player);
+  private newPlayerJoin(type: string, value: any): void {
+    this.isEnemyAdded = true; // Enemy has joined.
+    value["player"]["id"] = value["client"]["sessionId"]; // Assign Player to "client" and Player's ID to "sessionId".
+    this.scene.events.emit(type, value.player); // Emit event to the scene with message type.
   }
 
   /**
    * @function correctPositionOfPlayer
    * @description Sync player position with server.
-   * @param element player state object
+   * @param {any} [element] player state object
    * @access private
    */
-  private correctPositionOfPlayer(element) {
+  private correctPositionOfPlayer(element: any) {
     let player = this.players[element.id];
     player.x = element.x;
     player.y = element.y;
