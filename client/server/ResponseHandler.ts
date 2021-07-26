@@ -119,36 +119,6 @@ export default class Server extends Colyseus.Client {
 
   /**
    * @access private
-   * @callback onMessage
-   * @description Listens to all room's messages from the server and based on message type update adequate action.
-   * @param {any} [message] message data
-   * @param {any} [type] message type
-   * @returns {void}
-   */
-  private onMessage(message: any, type: any): void {
-    switch (type) {
-      case EventNames.PLAYER_LEFT:
-        this.onPlayerLeft(type, message); // Update gameplay after the player will leave the game.
-        break;
-      case EventNames.NEW_PLAYER_JOINED:
-        this.newPlayerJoin(type, message); // Update gameplay after the player will join the game.
-        break;
-      case EventNames.BULLET:
-        this.scene.events.emit(EventNames.ENEMY_BULLET, message); // Emit "ENEMY_BULLET" event to the scene with message data.
-        break;
-      case EventNames.ROTATE:
-        this.scene.events.emit(EventNames.ENEMY_ROTATE, message); // Emit "ENEMY_ROTATE" event to the scene with message data.
-        break;
-      case EventNames.ASTROID_ADDED:
-        this.scene.events.emit(EventNames.ASTROID_ADDED, message); // Emit "ASTROID_ADDED" event to the scene with message data.
-        break;
-      default:
-        break;
-    }
-  }
-
-  /**
-   * @access private
    * @description Update Player's state based on current state of the game on server end.
    * @function playersState
    * @param {any} [currentState] current state of the game on server end
@@ -198,6 +168,117 @@ export default class Server extends Colyseus.Client {
         }
       }
     }
+  }
+
+  /**
+   * @access private
+   * @function correctPositionOfPlayer
+   * @description Sync player position with server.
+   * @param {any} [element] Player state object
+   * @returns {void}
+   */
+  private correctPositionOfPlayer(element: any): void {
+    let player = this.players[element.id]; // Get adequate Player based on element's from the state ID.
+
+    // Get Player's position.
+    player.x = element.x;
+    player.y = element.y;
+
+    let j: number = 0;
+    while (j < player.pendingInputs.length) {
+      const input = player.pendingInputs[j];
+      if (input.sequenceNumber <= element.lastProcessedInput) {
+        // Already processed. Its effect is already taken into account into the world update
+        // we just got, so we can drop it.
+        player.pendingInputs.splice(j, 1);
+      } else {
+        // Not processed by the server yet. Re-apply it.
+        player.correctPosition(input);
+        j++;
+      }
+    }
+  }
+
+  /**
+   * @access private
+   * @description Sync enemy position with server.
+   * @function correctPositionEnemy
+   * @param {any} [element] Enemy state object
+   * @returns {void}
+   */
+  private correctPositionEnemy(element: any): void {
+    if (
+      this.players[element.id].x == element.x &&
+      this.players[element.id].y == element.y
+    ) {
+    } else {
+      let timestamp = +new Date(); // Set timestamp as positive integer.
+
+      // Get Enemy's position.
+      let position = {
+        x: element.x,
+        y: element.y,
+      };
+      this.players[element.id].positionBuffer.push([timestamp, position]);
+    }
+  }
+
+  /**
+   * @access private
+   * @callback onMessage
+   * @description Listens to all room's messages from the server and based on message type update adequate action.
+   * @param {any} [message] message data
+   * @param {any} [type] message type
+   * @returns {void}
+   */
+  private onMessage(message: any, type: any): void {
+    switch (type) {
+      case EventNames.PLAYER_LEFT:
+        this.onPlayerLeft(type, message); // Update gameplay after the player will leave the game.
+        break;
+      case EventNames.NEW_PLAYER_JOINED:
+        this.newPlayerJoin(type, message); // Update gameplay after the player will join the game.
+        break;
+      case EventNames.BULLET:
+        this.scene.events.emit(EventNames.ENEMY_BULLET, message); // Emit "ENEMY_BULLET" event to the scene with message data.
+        break;
+      case EventNames.ROTATE:
+        this.scene.events.emit(EventNames.ENEMY_ROTATE, message); // Emit "ENEMY_ROTATE" event to the scene with message data.
+        break;
+      case EventNames.ASTROID_ADDED:
+        this.scene.events.emit(EventNames.ASTROID_ADDED, message); // Emit "ASTROID_ADDED" event to the scene with message data.
+        break;
+      default:
+        break;
+    }
+  }
+
+  /**
+   * @access private
+   * @description Update gameplay after the player will leave the game.
+   * @function onPlayerLeft
+   * @param {string} [type] message type
+   * @param {any} [value] message value
+   * @returns {void}
+   */
+  private onPlayerLeft(type: string, value: any): void {
+    this.isEnemyAdded = false; // Enemy is gone as well with the Player (Player can't play alone).
+    this.scene.events.emit(type); // Emit event to the scene with message type.
+    delete this.players[value.sessionId]; // Delete player from the game.
+  }
+
+  /**
+   * @access private
+   * @description Update gameplay after the player will join the game.
+   * @function newPlayerJoin
+   * @param {any} [string] message type
+   * @param {any} [value] message value
+   * @returns {void}
+   */
+  private newPlayerJoin(type: string, value: any): void {
+    this.isEnemyAdded = true; // Enemy has joined.
+    value["player"]["id"] = value["client"]["sessionId"]; // Assign Player to "client" and Player's ID to "sessionId".
+    this.scene.events.emit(type, value.player); // Emit event to the scene with message type.
   }
 
   /**
@@ -290,86 +371,5 @@ export default class Server extends Colyseus.Client {
    */
   private onRotatePlayer(position: any) {
     this.room.send(EventNames.ROTATE, position); // Send a type of "ROTATE" message to the room handler with a position of the Player.
-  }
-
-  /**
-   * @access private
-   * @description Update gameplay after the player will leave the game.
-   * @function onPlayerLeft
-   * @param {string} [type] message type
-   * @param {any} [value] message value
-   * @returns {void}
-   */
-  private onPlayerLeft(type: string, value: any): void {
-    this.isEnemyAdded = false; // Enemy is gone as well with the Player (Player can't play alone).
-    this.scene.events.emit(type); // Emit event to the scene with message type.
-    delete this.players[value.sessionId]; // Delete player from the game.
-  }
-
-  /**
-   * @access private
-   * @description Update gameplay after the player will join the game.
-   * @function newPlayerJoin
-   * @param {any} [string] message type
-   * @param {any} [value] message value
-   * @returns {void}
-   */
-  private newPlayerJoin(type: string, value: any): void {
-    this.isEnemyAdded = true; // Enemy has joined.
-    value["player"]["id"] = value["client"]["sessionId"]; // Assign Player to "client" and Player's ID to "sessionId".
-    this.scene.events.emit(type, value.player); // Emit event to the scene with message type.
-  }
-
-  /**
-   * @access private
-   * @function correctPositionOfPlayer
-   * @description Sync player position with server.
-   * @param {any} [element] Player state object
-   * @returns {void}
-   */
-  private correctPositionOfPlayer(element: any): void {
-    let player = this.players[element.id]; // Get adequate Player based on element's from the state ID.
-
-    // Get Player's position.
-    player.x = element.x;
-    player.y = element.y;
-
-    let j: number = 0;
-    while (j < player.pendingInputs.length) {
-      const input = player.pendingInputs[j];
-      if (input.sequenceNumber <= element.lastProcessedInput) {
-        // Already processed. Its effect is already taken into account into the world update
-        // we just got, so we can drop it.
-        player.pendingInputs.splice(j, 1);
-      } else {
-        // Not processed by the server yet. Re-apply it.
-        player.correctPosition(input);
-        j++;
-      }
-    }
-  }
-
-  /**
-   * @access private
-   * @description Sync enemy position with server.
-   * @function correctPositionEnemy
-   * @param {any} [element] Enemy state object
-   * @returns {void}
-   */
-  private correctPositionEnemy(element: any): void {
-    if (
-      this.players[element.id].x == element.x &&
-      this.players[element.id].y == element.y
-    ) {
-    } else {
-      let timestamp = +new Date(); // Set timestamp as positive integer.
-
-      // Get Enemy's position.
-      let position = {
-        x: element.x,
-        y: element.y,
-      };
-      this.players[element.id].positionBuffer.push([timestamp, position]);
-    }
   }
 }
