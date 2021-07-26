@@ -334,7 +334,7 @@ export default class Server extends Colyseus.Client {
     player.x = element.x;
     player.y = element.y;
 
-    let j = 0;
+    let j: number = 0;
     while (j < player.pendingInputs.length) {
       const input = player.pendingInputs[j];
       if (input.sequenceNumber <= element.lastProcessedInput) {
