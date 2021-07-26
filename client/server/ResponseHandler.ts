@@ -321,18 +321,22 @@ export default class Server extends Colyseus.Client {
   }
 
   /**
+   * @access private
    * @function correctPositionOfPlayer
    * @description Sync player position with server.
    * @param {any} [element] player state object
-   * @access private
+   * @returns {void}
    */
-  private correctPositionOfPlayer(element: any) {
-    let player = this.players[element.id];
+  private correctPositionOfPlayer(element: any): void {
+    let player = this.players[element.id]; // Get adequate Player based on element's from the state ID.
+
+    // Get Player's position.
     player.x = element.x;
     player.y = element.y;
-    var j = 0;
+
+    let j = 0;
     while (j < player.pendingInputs.length) {
-      var input = player.pendingInputs[j];
+      const input = player.pendingInputs[j];
       if (input.sequenceNumber <= element.lastProcessedInput) {
         // Already processed. Its effect is already taken into account into the world update
         // we just got, so we can drop it.
