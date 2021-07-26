@@ -324,7 +324,7 @@ export default class Server extends Colyseus.Client {
    * @access private
    * @function correctPositionOfPlayer
    * @description Sync player position with server.
-   * @param {any} [element] player state object
+   * @param {any} [element] Player state object
    * @returns {void}
    */
   private correctPositionOfPlayer(element: any): void {
@@ -350,18 +350,21 @@ export default class Server extends Colyseus.Client {
   }
 
   /**
-   * @function correctPositionEnemy
-   * @description Sync enemy position with server.
-   * @param element enemy state object
    * @access private
+   * @description Sync enemy position with server.
+   * @function correctPositionEnemy
+   * @param {any} [element] Enemy state object
+   * @returns {void}
    */
-  private correctPositionEnemy(element) {
+  private correctPositionEnemy(element: any): void {
     if (
       this.players[element.id].x == element.x &&
       this.players[element.id].y == element.y
     ) {
     } else {
-      let timestamp = +new Date();
+      let timestamp = +new Date(); // Set timestamp as positive integer.
+
+      // Get Enemy's position.
       let position = {
         x: element.x,
         y: element.y,
