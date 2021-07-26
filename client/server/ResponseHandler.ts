@@ -97,8 +97,8 @@ export default class Server extends Colyseus.Client {
 
   /**
    * @access private
+   * @callback onStateChange
    * @description Listen to state changes on server side, it syncs moves.
-   * @function onStateChange
    * @param {any} [state] state of the Player
    * @returns {void}
    */
@@ -119,8 +119,8 @@ export default class Server extends Colyseus.Client {
 
   /**
    * @access private
+   * @callback onMessage
    * @description Listen to all room's messages from the server and based on message type update adequate action.
-   * @function onMessage
    * @param {any} [message] message data
    * @param {any} [type] message type
    * @returns {void}
