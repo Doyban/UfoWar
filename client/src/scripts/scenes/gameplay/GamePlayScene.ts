@@ -122,7 +122,7 @@ export default class GamePlayScene extends Phaser.Scene {
         content: "Play",
       },
     };
-    this.playBtn = new Button(this, button_config);
+    this.playBtn = new Button(button_config, this);
     this.playBtn.on("pointerup", this.onPlayBtnClick, this);
   }
 

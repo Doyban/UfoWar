@@ -1,17 +1,23 @@
 /**
  * @class Button
- * @description this class is an abstraction of phaser gameobject sprite, it will have all the required functionality to make a sprite as button
+ * @description Creates the Button game object and adds it to the scene.
+ * @extends Phaser.GameObjects.Sprite
  */
 export default class Button extends Phaser.GameObjects.Sprite {
-  buttonText: Phaser.GameObjects.Text;
+  public buttonText: Phaser.GameObjects.Text = <Phaser.GameObjects.Text>{};
+
   /**
    * @constructor
-   * @param scene [Phaser Scene] this scene to which the gameobject will be added
-   * @param config position config
+   * @description Create a new instance of this class.
+   * @param {any} [config] position config
+   * @param {any} [scene] Phaser scene to which Button will be added
    */
-  constructor(scene: any, config: any) {
+  constructor(config: any, scene: any) {
     super(scene, config.x, config.y, config.texture, config.frame);
-    this.scene.add.existing(this);
+
+    this.scene.add.existing(this); // Add game object to the current scene.
+
+    // Set Button text with its styles.
     let text_style = {
       fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif',
       fontSize: "32px",
@@ -24,39 +30,23 @@ export default class Button extends Phaser.GameObjects.Sprite {
       text,
       text_style
     );
-    this.scene.add.existing(this.buttonText);
-    Phaser.Display.Align.In.Center(this.buttonText, this);
+
+    this.scene.add.existing(this.buttonText); // Add Button text to the current scene.
+    Phaser.Display.Align.In.Center(this.buttonText, this); // Align the Button text to the center of the Button.
+
+    // Use the hand cursor for the Button.
     this.setInteractive({
       useHandCursor: true,
     });
-    this.addListeners();
-  }
-
-  /**
-   * @function addListeners
-   * @description this function includes all the listeners of this game object
-   * @access private
-   */
-  private addListeners() {
-    // this.on('pointerup', this.onPointerUp);
   }
 
   /**
    * @access public
-   * @function show
-   * @description this function is responsible for showing this button, along with the child text object if it has one
-   */
-  public show() {
-    this.setVisible(true);
-    this.buttonText.setVisible(true);
-  }
-
-  /**
-   * @access public
+   * @description Hide Button along with the Button text.
    * @function hide
-   * @description this function is responsible for hiding this button, along with the child text object if it has one
+   * @returns {void}
    */
-  public hide() {
+  public hide(): void {
     this.setVisible(false);
     this.buttonText.setVisible(false);
   }

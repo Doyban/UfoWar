@@ -20,7 +20,7 @@ export default class Server extends Colyseus.Client {
   /**
    * @constructor
    * @description Create a new instance of this class.
-   * @param {Scene} [scene] Phaser scene.
+   * @param {Scene} [scene] Phaser scene
    */
   constructor(scene: Scene) {
     let url: string = "ws://18.224.7.66:2567"; // Comment to bottom one: with this setup it also works on localhost...
@@ -81,7 +81,7 @@ export default class Server extends Colyseus.Client {
    * @access private
    * @description Configure room properties and listen to room's changes once the client will join the room successfully.
    * @function onRoomJoin
-   * @param {any} [room] communication channel to implement game session, and/or serve as the communication channel between a group of clients.
+   * @param {any} [room] communication channel to implement game session, and/or serve as the communication channel between a group of clients
    * @returns {void}
    */
   private onRoomJoin(room: Colyseus.Room): void {
@@ -285,7 +285,7 @@ export default class Server extends Colyseus.Client {
    * @access private
    * @description Listener for firing Bullet event.
    * @function onFire
-   * @param {any} [position] position of the Player.
+   * @param {any} [position] position of the Player
    * @returns {void}
    */
   private onFire(position: any): void {
@@ -306,7 +306,7 @@ export default class Server extends Colyseus.Client {
    * @access private
    * @description Listener for Player move event.
    * @function onMovePlayer
-   * @param {any} [position] position of the Player.
+   * @param {any} [position] position of the Player
    * @returns {void}
    */
   private onMovePlayer(position: any): void {
