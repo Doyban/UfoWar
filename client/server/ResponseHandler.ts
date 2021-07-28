@@ -92,6 +92,8 @@ export default class Server extends Colyseus.Client {
     this.roomName = room.name;
 
     room.onStateChange(this.onStateChange.bind(this, room.state)); // Colyseus' callback that will be called if state has any change, it syncs moves.
+
+    // !Important: these parameters have to be in such an order.
     room.onMessage("*", this.onMessage.bind(this)); // Colyseus' callback that will be called on all room's messages from the server and based on message type update adequate action.
   }
 
@@ -227,11 +229,12 @@ export default class Server extends Colyseus.Client {
    * @access private
    * @callback onMessage
    * @description Listens to all room's messages from the server and based on message type update adequate action.
-   * @param {any} [message] message data
    * @param {any} [type] message type
+   * @param {any} [message] message data
    * @returns {void}
+   * !Important: these parameters have to be in such an order.
    */
-  private onMessage(message: any, type: any): void {
+  private onMessage(type: any, message: any): void {
     switch (type) {
       case EventNames.PLAYER_LEFT:
         this.onPlayerLeft(type, message); // Update gameplay after the player will leave the game.
