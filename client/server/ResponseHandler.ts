@@ -4,7 +4,7 @@ import { Scene } from "phaser";
 
 /**
  * @class Server
- * @description this class is pack of all the behaviours of Server on client end.
+ * @description Contains all the behaviours of server on client end.
  * @extends Colyseus.Client
  */
 export default class Server extends Colyseus.Client {
