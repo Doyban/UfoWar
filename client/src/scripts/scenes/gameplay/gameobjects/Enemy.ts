@@ -1,111 +1,115 @@
-import { Sprite } from "../Interfaces";
 import { EventNames } from "../../../utils/GameConstants";
 
 /**
  * @class Enemy
- * @description this class is pack of alll the behaviours of enemy
- * @extends `Phaser Arcade Sprite`
+ * @description Creates the Enemy game object and adds it to the scene.
+ * @extends Phaser.Physics.Arcade.Sprite
  */
 export default class Enemy extends Phaser.Physics.Arcade.Sprite {
   config: any;
-  speed: number;
   positionBuffer: Array<any>;
+  speed: number;
+
   /**
    * @constructor
-   * @param scene [Phaser Scene] scene to which enemy should be added
-   * @param config position config
+   * @description Create a new instance of this class.
+   * @param {any} [config] position config
+   * @param {Phaser.Scene} [scene] Phaser scene to which Enemy will be added
    */
-  constructor(scene: Phaser.Scene, config: any) {
+  constructor(config: any, scene: Phaser.Scene) {
     super(scene, config.x, config.y, config.texture, config.frame);
-    this.scene.add.existing(this);
-    this.config = config;
-    this.speed = 0.1;
-    this.positionBuffer = [];
-    this.setAngle(this.config.rotation);
-    this.setDepth(2);
-    this.addListeners();
+
+    this.config = config; // Set up initial configuration.
+    this.scene.add.existing(this); // Add game object to the current scene.
+    this.positionBuffer = []; // Initialize empty position buffer to sync moves.
+    this.speed = 0.1; // Speed of the Enemy.
+
+    this.setAngle(this.config.rotation); // Angle of the game object.
+    this.setDepth(2); // Depth of this game object within this scene (rendering position), also known as 'z-index' in CSS.
+
+    this.addListeners(); // Add listeners of the game objects.
   }
 
   /**
+   * @access private
+   * @description Add listeners of the game objects.
    * @function addListeners
-   * @description this function includes all the listeners of this game object
-   * @access private
+   * @returns {void}
    */
-  private addListeners() {
-    this.scene.events.on(EventNames.PLAYER_LEFT, this.onPlayerLeft, this);
-    this.scene.events.on("enemymoved", this.onEnemyMoved, this);
-    this.scene.events.on(EventNames.ENEMY_ROTATE, this.onEnemyRotated, this);
+  private addListeners(): void {
+    this.scene.events.on(EventNames.PLAYER_LEFT, this.onPlayerLeft, this); // Listener for leaving the game event by the Player.
+    this.scene.events.on("enemymoved", this.onMoveEnemy, this); // Listener for Enemy move event.
+    this.scene.events.on(EventNames.ENEMY_ROTATE, this.onRotateEnemy, this); // Listener for rotate Player event.
   }
 
   /**
+   * @access private
+   * @description Listener for leaving the game event by the Player.
    * @function onPlayerLeft
-   * @description this function will be responsible for the functionality of destroying the enemy after exit
-   * @access private
+   * @returns {void}
    */
-  private onPlayerLeft() {
-    this.destroy(true);
+  private onPlayerLeft(): void {
+    this.destroy(true); // Destroy the Enemy.
   }
 
   /**
-   * @function onEnemyMoved
-   * @description this function will be responsible for the functionality of enemy moving after server response properties
    * @access private
-   * @param {any} [prop = null]
+   * @description Listener for Enemy move event.
+   * @function onMoveEnemy
+   * @param {any} [enemyProperties] Enemy properties.
+   * @returns {void}
    */
-  private onEnemyMoved(prop: any) {
-    this.x += (prop.x - this.x) * 0.5;
-    this.y += (prop.y - this.y) * 0.5;
+  private onMoveEnemy(enemyProperties: any): void {
+    // Update position properties of the Enemy.
+    this.x += (enemyProperties.x - this.x) * 0.5;
+    this.y += (enemyProperties.y - this.y) * 0.5;
   }
 
   /**
-   * @function onEnemyMoved
-   * @description this function will be responsible for the functionality of enemy moving after server response properties
    * @access private
-   * @param {any} [prop = null]
+   * @description Listener for rotate Player event.
+   * @function onRotateEnemy
+   * @param {any} [enemyProperties] Enemy properties.
+   * @returns {void}
    */
-  private onEnemyRotated(prop: any) {
-    this.rotation = prop.rotation;
+  private onRotateEnemy(enemyProperties: any): void {
+    this.rotation = enemyProperties.rotation; // Update rotation property.
   }
 
   /**
    * @access public
+   * @description Method invoked all the time during the game. Listens to the changes of this game object properties and rerenders every frame.
    * @function update
-   * @override `Phaser #update`
-   * @description the update function which executes at given fps
-   * @param {number} time The time value from the most recent Game step. Typically a high-resolution timer value, or Date.now().
-   * @param {number} deltaTime The delta value since the last frame. This is smoothed to avoid delta spikes by the TimeStep class.
+   * @override `Phaser.Gameobjects#update`
+   * @returns {void}
    */
-  public update(time, deltaTime) {
-    var now = +new Date();
-    var render_timestamp = now - 1000.0 / 64;
-    // Find the two authoritative positions surrounding the rendering timestamp.
-    var buffer = this.positionBuffer;
-    // Drop older positions.
+  public update(): void {
+    const now: number = +new Date(); // Get current date.
+    const render_timestamp: number = now - 1000.0 / 64; // Set render timestamp.
+    const buffer: Array<any> = this.positionBuffer; // Get the two authoritative positions surrounding the rendering timestamp.
+
+    // Drop older positions until the buffer's length is less than 2 and t1 from the buffer has older or same timestamp than "render_timestamp".
     while (buffer.length >= 2 && buffer[1][0] <= render_timestamp) {
-      console.log("buffer **************:>> ", buffer);
-      buffer.shift();
+      buffer.shift(); // Remove the first element and return it.
     }
-    // console.log('this.positionBuffer :>> ', this.positionBuffer);
+
+    // Check if the buffer's length is more or equal than 2 and t0 from the buffer has older or same timestamp than "render_timestamp" and t1 from the buffer has newer or same timestamp than "render_timestamp".
     if (
       buffer.length >= 2 &&
       buffer[0][0] <= render_timestamp &&
       render_timestamp <= buffer[1][0]
     ) {
-      console.log("buffer[0][1] :>> ", buffer[0][1]);
-      var x0 = buffer[0][1].x;
-      var x1 = buffer[1][1].x;
-      var y0 = buffer[0][1].y;
-      var y1 = buffer[1][1].y;
-      var t0 = buffer[0][0];
-      var t1 = buffer[1][0];
+      // Get positions and timestamps.
+      const x0 = buffer[0][1].x;
+      const x1 = buffer[1][1].x;
+      const y0 = buffer[0][1].y;
+      const y1 = buffer[1][1].y;
+      const t0 = buffer[0][0];
+      const t1 = buffer[1][0];
 
+      // Update position properties of the Enemy.
       this.x = x0 + ((x1 - x0) * (render_timestamp - t0)) / (t1 - t0);
       this.y = y0 + ((y1 - y0) * (render_timestamp - t0)) / (t1 - t0);
     }
-    // console.log('this.x, this.y :>> ', this.x, this.y);
-    // this.x += Phaser.Math.Linear(this.x, this['targetX'] || this.x, 0.07);
-    // this.y += Phaser.Math.Linear(this.y, this['targetY'] || this.x, 0.07);
-    // this.x += Phaser.Math.GetSpeed(this['targetX'] - this.x, this.speed) * deltaTime;
-    // this.y += Phaser.Math.GetSpeed(this['targetY'] - this.y, this.speed) * deltaTime;
   }
 }

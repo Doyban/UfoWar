@@ -314,7 +314,7 @@ export default class GamePlayScene extends Phaser.Scene {
       frame: "shipBlue_manned.png",
     };
     let config = Phaser.Utils.Objects.Merge(obj, enemyConfig);
-    this.enemy = new Enemy(this, config);
+    this.enemy = new Enemy(config, this);
     // adding enemy to players array of server
     this.server.players[obj.id] = this.enemy;
   }
