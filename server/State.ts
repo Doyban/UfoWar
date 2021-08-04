@@ -1,6 +1,5 @@
 import { Schema, ArraySchema, MapSchema, type } from "@colyseus/schema";
 import Player from "./schemas/Player";
-import { EventNames } from "./utils/EventNames";
 import Bullet from "./schemas/Bullet";
 
 /**

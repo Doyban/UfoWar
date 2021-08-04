@@ -1,4 +1,4 @@
-import { Schema, ArraySchema, MapSchema, type } from "@colyseus/schema";
+import { Schema, ArraySchema, type } from "@colyseus/schema";
 import Bullet from "./Bullet";
 
 export default class Player extends Schema {
