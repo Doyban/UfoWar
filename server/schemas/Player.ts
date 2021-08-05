@@ -1,6 +1,11 @@
 import Bullet from "./Bullet";
 import { type, ArraySchema, Schema } from "@colyseus/schema";
 
+/**
+ * @class Player
+ * @description Creates the schema for Player.
+ * @extends Schema
+ */
 export default class Player extends Schema {
   @type([Bullet])
   bullets: ArraySchema<Bullet>;
