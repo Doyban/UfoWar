@@ -28,7 +28,7 @@ class Game extends Phaser.Game {
       },
       backgroundColor: "#000000", // Add default background color to the game.
     };
-    super(game_config);
+    super(game_config); // Add configuration to the game.
   }
 }
 
