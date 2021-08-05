@@ -1,4 +1,4 @@
-import { Schema, type } from "@colyseus/schema";
+import { type, Schema } from "@colyseus/schema";
 
 export default class Bullet extends Schema {
   @type("number")
