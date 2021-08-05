@@ -4,7 +4,7 @@ export const EventNames = {
   ENEMY_BULLET: "enemyBullet",
   ENEMY_DEAD: "enemyDead",
   ENEMY_ROTATE: "enemyRotate",
-  HERO_ADDED: "heroAdded",
+  PLAYER_ADDED: "playerAdded",
   MOVE: "move",
   MOVE_DOWN: "movePlayerDown",
   MOVE_LEFT: "movePlayerLeft",

@@ -146,7 +146,7 @@ export default class Server extends Colyseus.Client {
 
           // Check if player added already if not, add now.
           if (!this.isPlayerAdded) {
-            this.scene.events.emit(EventNames.HERO_ADDED, playerProperties); // Emit "HERO_ADDED" event to the scene with Player properties.
+            this.scene.events.emit(EventNames.PLAYER_ADDED, playerProperties); // Emit "PLAYER_ADDED" event to the scene with Player properties.
             this.isPlayerAdded = true;
           } else {
             this.correctPositionOfPlayer(element); // Sync Player position with server.

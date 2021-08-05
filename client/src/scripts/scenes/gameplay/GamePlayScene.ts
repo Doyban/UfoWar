@@ -279,7 +279,7 @@ export default class GamePlayScene extends Phaser.Scene {
    * @access private
    */
   private addListeners() {
-    this.events.on(EventNames.HERO_ADDED, this.onAddPlayer, this);
+    this.events.on(EventNames.PLAYER_ADDED, this.onAddPlayer, this);
     this.events.on(EventNames.NEW_PLAYER_JOINED, this.onAddEnemy, this);
     this.events.on(EventNames.ENEMY_BULLET, this.onEnemyFired, this);
     this.events.on(EventNames.ASTROID_ADDED, this.onAddAstroid, this);
