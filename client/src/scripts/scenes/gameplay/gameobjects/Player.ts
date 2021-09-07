@@ -62,7 +62,20 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
    * @returns {void}
    */
   private addListeners(): void {
-    this.scene.events.on("playermoved", this.onPlayerMoved, this); // Listener for Player move event.
+    this.scene.events.on("playermoved", this.onMovePlayer, this); // Listener for Player move event.
+  }
+
+  /**
+   * @access private
+   * @description Listener for Player move event.
+   * @function onMovePlayer
+   * @param {any} [prop = null]
+   * @returns {void}
+   */
+  private onMovePlayer(prop: any = null): void {
+    // Update position properties of the Player.
+    this.x = Phaser.Math.Linear(this.x, prop.x, 0.7);
+    this.y = Phaser.Math.Linear(this.y, prop.y, 0.7);
   }
 
   /**
@@ -87,17 +100,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
    */
   private sendRotationUpdate(inputObj: any) {
     this.scene.events.emit(EventNames.ROTATE, inputObj);
-  }
-
-  /**
-   * @function onPlayerMoved
-   * @description this function will be responsible for the functionality of player moving after server response properties
-   * @access private
-   * @param {any} [prop = null]
-   */
-  private onPlayerMoved(prop: any = null) {
-    this.x = Phaser.Math.Linear(this.x, prop.x, 0.7);
-    this.y = Phaser.Math.Linear(this.y, prop.y, 0.7);
   }
 
   /**
