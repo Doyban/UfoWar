@@ -56,7 +56,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
    * @access private
    * @description Listener for Enemy move event.
    * @function onMoveEnemy
-   * @param {any} [enemyProperties] Enemy properties.
+   * @param {any} [enemyProperties] Enemy properties
    * @returns {void}
    */
   private onMoveEnemy(enemyProperties: any): void {
@@ -69,7 +69,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
    * @access private
    * @description Listener for rotate Player event.
    * @function onRotateEnemy
-   * @param {any} [enemyProperties] Enemy properties.
+   * @param {any} [enemyProperties] Enemy properties
    * @returns {void}
    */
   private onRotateEnemy(enemyProperties: any): void {

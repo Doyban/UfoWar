@@ -1,37 +1,40 @@
-import { Sprite } from "../Interfaces";
 import { EventNames } from "../../../utils/GameConstants";
 
 /**
  * @class Player
- * @description this class is pack of alll the behaviours of player
- * @extends `Phaser Arcade Sprite`
+ * @description Creates the Player game object and adds it to the scene.
+ * @extends Phaser.Physics.Arcade.Sprite
  */
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   config: any;
-  keyCodes: any;
-  speed: number;
-  positionBuffer: Array<any>;
   inputSequenceNumber: number;
+  keyCodes: any;
   pendingInputs: Array<any>;
-  lag: number;
+  positionBuffer: Array<any>;
+  speed: number;
+
   /**
    * @constructor
-   * @param scene [Phaser Scene] scene to which player should be added
-   * @param config position config
+   * @description Create a new instance of this class.
+   * @param {any} [config] position config
+   * @param {Phaser.Scene} [scene] Phaser scene to which Enemy will be added
    */
-  constructor(scene: Phaser.Scene, config: any) {
+  constructor(config: any, scene: Phaser.Scene) {
     super(scene, config.x, config.y, config.texture, config.frame);
-    this.scene.add.existing(this);
-    this.config = config;
-    this.speed = 2;
-    this.positionBuffer = [];
-    this.pendingInputs = [];
-    this.inputSequenceNumber = 0;
-    this.lag = 0;
-    this.setAngle(this.config.rotation);
-    this.setDepth(2);
-    this.addKeycodes();
-    this.addListeners();
+
+    this.config = config; // Set up initial configuration.
+    this.scene.add.existing(this); // Add game object to the current scene.
+
+    this.inputSequenceNumber = 0; // Input sequence number initially is set to 0 to distinguish keyboard sequence numbers.
+    this.pendingInputs = []; // Initialize empty position buffer to sync moves.
+    this.positionBuffer = []; // Initialize empty position buffer to sync moves.
+    this.speed = 2; // Speed of the Player.
+
+    this.setAngle(this.config.rotation); // Angle of the game object.
+    this.setDepth(2); // Depth of this game object within this scene (rendering position), also known as 'z-index' in CSS.
+
+    this.addKeycodes(); // Add keycodes.
+    this.addListeners(); // Add listeners of the game objects.
   }
 
   /**

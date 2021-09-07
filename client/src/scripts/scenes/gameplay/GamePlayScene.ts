@@ -297,7 +297,7 @@ export default class GamePlayScene extends Phaser.Scene {
       frame: "shipBeige_manned.png",
     };
     let config = Phaser.Utils.Objects.Merge(obj, playerConfig);
-    this.player = new Player(this, config);
+    this.player = new Player(config, this);
     // inserting players to players array of server
     this.server.players[obj.id] = this.player;
   }
