@@ -39,20 +39,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
   /**
    * @access private
-   * @description Add listeners of the game objects.
-   * @function addListeners
+   * @description Add keycodes.
+   * @function addKeycodes
    * @returns {void}
    */
-  private addListeners(): void {
-    this.scene.events.on("playermoved", this.onPlayerMoved, this); // Listener for Player move event.
-  }
-
-  /**
-   * @function addKeycodes
-   * @description this function will be responsible for the functionality that happens after keycode up down
-   * @access private
-   */
-  private addKeycodes() {
+  private addKeycodes(): void {
     this.keyCodes = this.scene.input.keyboard.addKeys({
       up: Phaser.Input.Keyboard.KeyCodes.UP,
       down: Phaser.Input.Keyboard.KeyCodes.DOWN,
@@ -62,6 +53,16 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       a: Phaser.Input.Keyboard.KeyCodes.A,
       d: Phaser.Input.Keyboard.KeyCodes.D,
     });
+  }
+
+  /**
+   * @access private
+   * @description Add listeners of the game objects.
+   * @function addListeners
+   * @returns {void}
+   */
+  private addListeners(): void {
+    this.scene.events.on("playermoved", this.onPlayerMoved, this); // Listener for Player move event.
   }
 
   /**
