@@ -38,13 +38,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   /**
-   * @function addListeners
-   * @description this function includes all the listeners of this game object
    * @access private
+   * @description Add listeners of the game objects.
+   * @function addListeners
+   * @returns {void}
    */
-  private addListeners() {
-    this.scene.events.on("playermoved", this.onPlayerMoved, this);
-    // this.scene.input.keyboard.on('keydown_SPACE', this.onSpaceDown, this);
+  private addListeners(): void {
+    this.scene.events.on("playermoved", this.onPlayerMoved, this); // Listener for Player move event.
   }
 
   /**
