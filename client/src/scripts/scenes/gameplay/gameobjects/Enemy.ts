@@ -21,6 +21,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     this.config = config; // Set up initial configuration.
     this.scene.add.existing(this); // Add game object to the current scene.
+
     this.positionBuffer = []; // Initialize empty position buffer to sync moves.
     this.speed = 0.1; // Speed of the Enemy.
 
@@ -39,7 +40,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
   private addListeners(): void {
     this.scene.events.on(EventNames.PLAYER_LEFT, this.onPlayerLeft, this); // Listener for leaving the game event by the Player.
     this.scene.events.on("enemymoved", this.onMoveEnemy, this); // Listener for Enemy move event.
-    this.scene.events.on(EventNames.ENEMY_ROTATE, this.onRotateEnemy, this); // Listener for rotate Player event.
+    this.scene.events.on(EventNames.ENEMY_ROTATE, this.onRotateEnemy, this); // Listener for rotate Enemy event.
   }
 
   /**
@@ -67,7 +68,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
   /**
    * @access private
-   * @description Listener for rotate Player event.
+   * @description Listener for rotate Enemy event.
    * @function onRotateEnemy
    * @param {any} [enemyProperties] Enemy properties
    * @returns {void}
