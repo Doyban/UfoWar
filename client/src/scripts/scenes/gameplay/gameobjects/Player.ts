@@ -69,13 +69,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
    * @access private
    * @description Listener for Player move event.
    * @function onMovePlayer
-   * @param {any} [prop = null]
+   * @param {any} [null] prop
    * @returns {void}
    */
-  private onMovePlayer(prop: any = null): void {
+  private onMovePlayer(playerProperties: any = null): void {
     // Update position properties of the Player.
-    this.x = Phaser.Math.Linear(this.x, prop.x, 0.7);
-    this.y = Phaser.Math.Linear(this.y, prop.y, 0.7);
+    this.x = Phaser.Math.Linear(this.x, playerProperties.x, 0.7);
+    this.y = Phaser.Math.Linear(this.y, playerProperties.y, 0.7);
   }
 
   /**
