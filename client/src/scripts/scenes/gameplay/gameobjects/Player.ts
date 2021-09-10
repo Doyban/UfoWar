@@ -79,8 +79,87 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   /**
+   * @access public
+   * @description Method invoked all the time during the game. Listens to the changes of this game object properties and rerenders every frame.
+   * @function update
+   * @override `Phaser.Gameobjects#update`
+   * @param {number} [deltaTime] the delta value since the last frame, this is smoothed to avoid delta spikes by the TimeStep class
+   * @param {number} [time] The time value from the most recent Game step. Typically a high-resolution timer value, or Date.now().
+   * @returns {void}
+   * !Important: the "time" parameter has to be here, otherwise it breaks the game, i.e., the player disappears after first keystroke.
+   */
+  public update(time: number, deltaTime: number) {
+    let input: { down_time: number } = { down_time: deltaTime };
+
+    // Check if the keyboard button "Up" is currently being held down with at least 100 ms must have elapsed to before this Key is considered down.
+    if (this.scene.input.keyboard.checkDown(this.keyCodes.up, 100)) {
+      this.y += this.speed * -deltaTime; // Update the "y" position of the Player.
+
+      // Get interested metadata into the "input" array.
+      input["sequenceNumber"] = this.inputSequenceNumber++;
+      input["key"] = 0;
+      input["down_time"] = -deltaTime;
+
+      this.sendMovementUpdate(input); // Update Player's movement.
+    }
+    // Check if the keyboard button "Down" is currently being held down with at least 100 ms must have elapsed to before this Key is considered down.
+    if (this.scene.input.keyboard.checkDown(this.keyCodes.down, 100)) {
+      this.y += this.speed * deltaTime; // Update the "y" position of the Player.
+
+      // Get interested metadata into the "input" array.
+      input["sequenceNumber"] = this.inputSequenceNumber++;
+      input["key"] = 0;
+      input["down_time"] = deltaTime;
+
+      this.sendMovementUpdate(input); // Update Player's movement.
+    }
+    // Check if the keyboard button "Left" is currently being held down with at least 100 ms must have elapsed to before this Key is considered down.
+    if (this.scene.input.keyboard.checkDown(this.keyCodes.left, 100)) {
+      this.x += this.speed * -deltaTime; // Update the "x" position of the Player.
+
+      // Get interested metadata into the "input" array.
+      input["sequenceNumber"] = this.inputSequenceNumber++;
+      input["key"] = 1;
+      input["down_time"] = -deltaTime;
+
+      this.sendMovementUpdate(input); // Update Player's movement.
+    }
+    // Check if the keyboard button "Right" is currently being held down with at least 100 ms must have elapsed to before this Key is considered down.
+    if (this.scene.input.keyboard.checkDown(this.keyCodes.right, 100)) {
+      this.x += this.speed * deltaTime; // Update the "x" position of the Player.
+
+      // Get interested metadata into the "input" array.
+      input["sequenceNumber"] = this.inputSequenceNumber++;
+      input["key"] = 1;
+      input["down_time"] = deltaTime;
+
+      this.sendMovementUpdate(input); // Update Player's movement.
+    }
+    // Check if the keyboard button "Space" is currently being held down with at least 3000 ms must have elapsed to before this Key is considered down.
+    if (this.scene.input.keyboard.checkDown(this.keyCodes.space, 3000)) {
+      this.createPlayerBullet(); // Create Player's bullet after holding "Space" for 3000 ms.
+    }
+    // Check if the keyboard button "A" is currently being held down with at least 100 ms must have elapsed to before this Key is considered down.
+    if (this.scene.input.keyboard.checkDown(this.keyCodes.a, 100)) {
+      this.rotation += 0.01 * deltaTime; // Update the "rotation" of the Player.
+
+      input["rotation"] = this.rotation; // Get interested metadata into the "input" array.
+
+      this.sendRotationUpdate(input); // Update Player's rotation.
+    }
+    // Check if the keyboard button "D" is currently being held down with at least 100 ms must have elapsed to before this Key is considered down.
+    if (this.scene.input.keyboard.checkDown(this.keyCodes.d, 100)) {
+      this.rotation -= 0.01 * deltaTime; // Update the "rotation" of the Player.
+
+      input["rotation"] = this.rotation; // Get interested metadata into the "input" array.
+
+      this.sendRotationUpdate(input); // Update Player's rotation.
+    }
+  }
+
+  /**
    * @function sendMovementUpdate
-   * @description this function will be responsible for the functionality that updates server with movement change
+   * @description Update Player's movement.
    * @access private
    * @param {any} [obj = null]
    */
@@ -94,7 +173,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
   /**
    * @function sendRotationUpdate
-   * @description this function will be responsible for the functionality that updates server with rotation change
+   * @description Update Player's rotation.
    * @access private
    * @param {any} [obj = null]
    */
@@ -121,10 +200,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
   /**
    * @access private
-   * @function onSpaceDown
-   * @description this function will be listening on space button click, and will create a player bullet and adds it to the scene
+   * @function createPlayerBullet
+   * @description // Create Player's bullet after holding "Space" for 3000 ms.
    */
-  private onSpaceDown() {
+  private createPlayerBullet() {
     let dome = this.scene.physics.add.sprite(
       this.x,
       this.y,
@@ -145,65 +224,5 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       rotation: dome.rotation,
     });
     this.scene.events.emit("addPlayerBullet", dome);
-  }
-
-  /**
-   * @access public
-   * @function update
-   * @override `Phaser #update`
-   * @description the update function which executes at given fps
-   * @param {number} time The time value from the most recent Game step. Typically a high-resolution timer value, or Date.now().
-   * @param {number} deltaTime The delta value since the last frame. This is smoothed to avoid delta spikes by the TimeStep class.
-   */
-  public update(time, deltaTime) {
-    let input = { down_time: deltaTime };
-    // check if key board down is down
-    if (this.scene.input.keyboard.checkDown(this.keyCodes.down, 100)) {
-      this.y += this.speed * deltaTime;
-      input["sequenceNumber"] = this.inputSequenceNumber++;
-      input["key"] = 0;
-      input["down_time"] = deltaTime;
-      this.sendMovementUpdate(input);
-    }
-    // check if key board up is down
-    if (this.scene.input.keyboard.checkDown(this.keyCodes.up, 100)) {
-      this.y += this.speed * -deltaTime;
-      input["sequenceNumber"] = this.inputSequenceNumber++;
-      input["key"] = 0;
-      input["down_time"] = -deltaTime;
-      this.sendMovementUpdate(input);
-    }
-    // check if key board left is down
-    if (this.scene.input.keyboard.checkDown(this.keyCodes.left, 100)) {
-      this.x += this.speed * -deltaTime;
-      input["sequenceNumber"] = this.inputSequenceNumber++;
-      input["key"] = 1;
-      input["down_time"] = -deltaTime;
-      this.sendMovementUpdate(input);
-    }
-    // check if key board A is down
-    if (this.scene.input.keyboard.checkDown(this.keyCodes.a, 100)) {
-      this.rotation += 0.01 * deltaTime;
-      input["rotation"] = this.rotation;
-      this.sendRotationUpdate(input);
-    }
-    // check if key board D is down
-    if (this.scene.input.keyboard.checkDown(this.keyCodes.d, 100)) {
-      this.rotation -= 0.01 * deltaTime;
-      input["rotation"] = this.rotation;
-      this.sendRotationUpdate(input);
-    }
-    // check if key board right is down
-    if (this.scene.input.keyboard.checkDown(this.keyCodes.right, 100)) {
-      this.x += this.speed * deltaTime;
-      input["sequenceNumber"] = this.inputSequenceNumber++;
-      input["key"] = 1;
-      input["down_time"] = deltaTime;
-      this.sendMovementUpdate(input);
-    }
-    // check if key board space is down
-    if (this.scene.input.keyboard.checkDown(this.keyCodes.space, 3000)) {
-      this.onSpaceDown();
-    }
   }
 }
