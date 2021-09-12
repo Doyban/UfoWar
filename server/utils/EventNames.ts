@@ -11,5 +11,5 @@ export const EventNames = {
   NEW_PLAYER_JOINED: "newPlayerJoined",
   PLAYER_DEAD: "playerDead",
   PLAYER_LEFT: "playerleft",
-  ROTATE: "rotate",
+  PLAYER_ROTATE: "playerRotate",
 };

@@ -54,7 +54,7 @@ export default class Server extends Colyseus.Client {
     this.scene.events.on(EventNames.MOVE_RIGHT, this.onMovePlayerRight, this); // Listener for Player move right event.
     this.scene.events.on(EventNames.MOVE_UP, this.onMovePlayerUp, this); // Listener for Player move up event.
     this.scene.events.on(EventNames.PLAYER_DEAD, this.onPlayerDead, this); // Listener for Player dead event after the enemy hits the Player.
-    this.scene.events.on(EventNames.ROTATE, this.onRotatePlayer, this); // Listener for rotate Player event.
+    this.scene.events.on(EventNames.PLAYER_ROTATE, this.onRotatePlayer, this); // Listener for rotate Player event.
   }
 
   /**
@@ -245,7 +245,7 @@ export default class Server extends Colyseus.Client {
       case EventNames.BULLET:
         this.scene.events.emit(EventNames.ENEMY_BULLET, message); // Emit "ENEMY_BULLET" event to the scene with message data.
         break;
-      case EventNames.ROTATE:
+      case EventNames.ENEMY_ROTATE:
         this.scene.events.emit(EventNames.ENEMY_ROTATE, message); // Emit "ENEMY_ROTATE" event to the scene with message data.
         break;
       case EventNames.ASTROID_ADDED:
@@ -373,6 +373,6 @@ export default class Server extends Colyseus.Client {
    * @param {any} [position] position of the Player
    */
   private onRotatePlayer(position: any) {
-    this.room.send(EventNames.ROTATE, position); // Send a type of "ROTATE" message to the room handler with a position of the Player.
+    this.room.send(EventNames.PLAYER_ROTATE, position); // Send a type of "PLAYER_ROTATE" message to the room handler with a position of the Player.
   }
 }

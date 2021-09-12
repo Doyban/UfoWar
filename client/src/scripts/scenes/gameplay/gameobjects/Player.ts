@@ -84,56 +84,56 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
    * @function update
    * @override `Phaser.Gameobjects#update`
    * @param {number} [deltaTime] the delta value since the last frame, this is smoothed to avoid delta spikes by the TimeStep class
-   * @param {number} [time] The time value from the most recent Game step. Typically a high-resolution timer value, or Date.now().
+   * @param {number} [time] The time value from the most recent Game step. Typically a high-resolution timer value, or Date.now()
    * @returns {void}
    * !Important: the "time" parameter has to be here, otherwise it breaks the game, i.e., the player disappears after first keystroke.
    */
   public update(time: number, deltaTime: number) {
-    let input: { down_time: number } = { down_time: deltaTime };
+    let playerProperties: { down_time: number } = { down_time: deltaTime };
 
     // Check if the keyboard button "Up" is currently being held down with at least 100 ms must have elapsed to before this Key is considered down.
     if (this.scene.input.keyboard.checkDown(this.keyCodes.up, 100)) {
       this.y += this.speed * -deltaTime; // Update the "y" position of the Player.
 
-      // Get interested metadata into the "input" array.
-      input["sequenceNumber"] = this.inputSequenceNumber++;
-      input["key"] = 0;
-      input["down_time"] = -deltaTime;
+      // Set interested player properties.
+      playerProperties["sequenceNumber"] = this.inputSequenceNumber++;
+      playerProperties["key"] = 0;
+      playerProperties["down_time"] = -deltaTime;
 
-      this.sendMovementUpdate(input); // Update Player's movement.
+      this.sendMovementUpdate(playerProperties); // Update Player's movement.
     }
     // Check if the keyboard button "Down" is currently being held down with at least 100 ms must have elapsed to before this Key is considered down.
     if (this.scene.input.keyboard.checkDown(this.keyCodes.down, 100)) {
       this.y += this.speed * deltaTime; // Update the "y" position of the Player.
 
-      // Get interested metadata into the "input" array.
-      input["sequenceNumber"] = this.inputSequenceNumber++;
-      input["key"] = 0;
-      input["down_time"] = deltaTime;
+      // Set interested player properties.
+      playerProperties["sequenceNumber"] = this.inputSequenceNumber++;
+      playerProperties["key"] = 0;
+      playerProperties["down_time"] = deltaTime;
 
-      this.sendMovementUpdate(input); // Update Player's movement.
+      this.sendMovementUpdate(playerProperties); // Update Player's movement.
     }
     // Check if the keyboard button "Left" is currently being held down with at least 100 ms must have elapsed to before this Key is considered down.
     if (this.scene.input.keyboard.checkDown(this.keyCodes.left, 100)) {
       this.x += this.speed * -deltaTime; // Update the "x" position of the Player.
 
-      // Get interested metadata into the "input" array.
-      input["sequenceNumber"] = this.inputSequenceNumber++;
-      input["key"] = 1;
-      input["down_time"] = -deltaTime;
+      // Set interested player properties.
+      playerProperties["sequenceNumber"] = this.inputSequenceNumber++;
+      playerProperties["key"] = 1;
+      playerProperties["down_time"] = -deltaTime;
 
-      this.sendMovementUpdate(input); // Update Player's movement.
+      this.sendMovementUpdate(playerProperties); // Update Player's movement.
     }
     // Check if the keyboard button "Right" is currently being held down with at least 100 ms must have elapsed to before this Key is considered down.
     if (this.scene.input.keyboard.checkDown(this.keyCodes.right, 100)) {
       this.x += this.speed * deltaTime; // Update the "x" position of the Player.
 
-      // Get interested metadata into the "input" array.
-      input["sequenceNumber"] = this.inputSequenceNumber++;
-      input["key"] = 1;
-      input["down_time"] = deltaTime;
+      // Set interested player properties.
+      playerProperties["sequenceNumber"] = this.inputSequenceNumber++;
+      playerProperties["key"] = 1;
+      playerProperties["down_time"] = deltaTime;
 
-      this.sendMovementUpdate(input); // Update Player's movement.
+      this.sendMovementUpdate(playerProperties); // Update Player's movement.
     }
     // Check if the keyboard button "Space" is currently being held down with at least 3000 ms must have elapsed to before this Key is considered down.
     if (this.scene.input.keyboard.checkDown(this.keyCodes.space, 3000)) {
@@ -143,17 +143,17 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if (this.scene.input.keyboard.checkDown(this.keyCodes.a, 100)) {
       this.rotation += 0.01 * deltaTime; // Update the "rotation" of the Player.
 
-      input["rotation"] = this.rotation; // Get interested metadata into the "input" array.
+      playerProperties["rotation"] = this.rotation; // Set interested player properties.
 
-      this.sendRotationUpdate(input); // Update Player's rotation.
+      this.onRotatePlayer(playerProperties); // Update Player's rotation.
     }
     // Check if the keyboard button "D" is currently being held down with at least 100 ms must have elapsed to before this Key is considered down.
     if (this.scene.input.keyboard.checkDown(this.keyCodes.d, 100)) {
       this.rotation -= 0.01 * deltaTime; // Update the "rotation" of the Player.
 
-      input["rotation"] = this.rotation; // Get interested metadata into the "input" array.
+      playerProperties["rotation"] = this.rotation; // Set interested player properties.
 
-      this.sendRotationUpdate(input); // Update Player's rotation.
+      this.onRotatePlayer(playerProperties); // Update Player's rotation.
     }
   }
 
@@ -172,13 +172,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   /**
-   * @function sendRotationUpdate
-   * @description Update Player's rotation.
    * @access private
-   * @param {any} [obj = null]
+   * @description Update Player's rotation.
+   * @function onRotatePlayer
+   * @param {any} [playerProperties] Player properties
+   * @returns {void}
    */
-  private sendRotationUpdate(inputObj: any) {
-    this.scene.events.emit(EventNames.ROTATE, inputObj);
+  private onRotatePlayer(playerProperties: any): void {
+    this.scene.events.emit(EventNames.PLAYER_ROTATE, playerProperties); // Emit "PLAYER_ROTATE" event to the scene with message data.
   }
 
   /**

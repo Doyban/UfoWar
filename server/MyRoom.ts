@@ -69,7 +69,7 @@ export class MyRoom extends Room {
       this.broadcast(type, message, {
         except: client,
       });
-    } else if (type === EventNames.ROTATE) {
+    } else if (type === EventNames.PLAYER_ROTATE) {
       //check if message is bullet
       // broadcast message to rotate a client on other players worlds
       this.broadcast(type, message, {
