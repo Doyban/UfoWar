@@ -26,7 +26,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.scene.add.existing(this); // Add game object to the current scene.
 
     this.inputSequenceNumber = 0; // Input sequence number initially is set to 0 to distinguish keyboard sequence numbers.
-    this.pendingInputs = []; // Initialize empty position buffer to sync moves.
+    this.pendingInputs = []; // Initialize empty pending inputs to sync moves.
     this.positionBuffer = []; // Initialize empty position buffer to sync moves.
     this.speed = 2; // Speed of the Player.
 
@@ -95,7 +95,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if (this.scene.input.keyboard.checkDown(this.keyCodes.up, 100)) {
       this.y += this.speed * -deltaTime; // Update the "y" position of the Player.
 
-      // Set interested player properties.
+      // Set movement update properties of the Player.
       playerProperties["sequenceNumber"] = this.inputSequenceNumber++;
       playerProperties["key"] = 0;
       playerProperties["down_time"] = -deltaTime;
@@ -106,7 +106,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if (this.scene.input.keyboard.checkDown(this.keyCodes.down, 100)) {
       this.y += this.speed * deltaTime; // Update the "y" position of the Player.
 
-      // Set interested player properties.
+      // Set movement update properties of the Player.
       playerProperties["sequenceNumber"] = this.inputSequenceNumber++;
       playerProperties["key"] = 0;
       playerProperties["down_time"] = deltaTime;
@@ -117,7 +117,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if (this.scene.input.keyboard.checkDown(this.keyCodes.left, 100)) {
       this.x += this.speed * -deltaTime; // Update the "x" position of the Player.
 
-      // Set interested player properties.
+      // Set movement update properties of the Player.
       playerProperties["sequenceNumber"] = this.inputSequenceNumber++;
       playerProperties["key"] = 1;
       playerProperties["down_time"] = -deltaTime;
@@ -128,7 +128,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if (this.scene.input.keyboard.checkDown(this.keyCodes.right, 100)) {
       this.x += this.speed * deltaTime; // Update the "x" position of the Player.
 
-      // Set interested player properties.
+      // Set movement update properties of the Player.
       playerProperties["sequenceNumber"] = this.inputSequenceNumber++;
       playerProperties["key"] = 1;
       playerProperties["down_time"] = deltaTime;
@@ -143,7 +143,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if (this.scene.input.keyboard.checkDown(this.keyCodes.a, 100)) {
       this.rotation += 0.01 * deltaTime; // Update the "rotation" of the Player.
 
-      playerProperties["rotation"] = this.rotation; // Set interested player properties.
+      playerProperties["rotation"] = this.rotation; // Set movement update properties of the Player.
 
       this.onRotatePlayer(playerProperties); // Update Player's rotation.
     }
@@ -151,24 +151,27 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if (this.scene.input.keyboard.checkDown(this.keyCodes.d, 100)) {
       this.rotation -= 0.01 * deltaTime; // Update the "rotation" of the Player.
 
-      playerProperties["rotation"] = this.rotation; // Set interested player properties.
+      playerProperties["rotation"] = this.rotation; // Set movement update properties of the Player.
 
       this.onRotatePlayer(playerProperties); // Update Player's rotation.
     }
   }
 
   /**
-   * @function sendMovementUpdate
-   * @description Update Player's movement.
    * @access private
-   * @param {any} [obj = null]
+   * @description Update Player's movement.
+   * @function sendMovementUpdate
+   * @param {any} [playerProperties] Player properties
+   * @returns {void}
    */
-  private sendMovementUpdate(inputObj: any) {
-    // console.log('pos :>> ', inputObj);
-    inputObj["x"] = this.x;
-    inputObj["y"] = this.y;
-    this.scene.events.emit(EventNames.MOVE, inputObj);
-    this.pendingInputs.push(inputObj);
+  private sendMovementUpdate(playerProperties: any): void {
+    // Set movement update properties of the Player.
+    playerProperties["x"] = this.x;
+    playerProperties["y"] = this.y;
+
+    this.scene.events.emit(EventNames.MOVE, playerProperties); // Emit "MOVE" event to the scene with Player properties.
+
+    this.pendingInputs.push(playerProperties); // Update pending inputs to sync moves.
   }
 
   /**
@@ -179,7 +182,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
    * @returns {void}
    */
   private onRotatePlayer(playerProperties: any): void {
-    this.scene.events.emit(EventNames.PLAYER_ROTATE, playerProperties); // Emit "PLAYER_ROTATE" event to the scene with message data.
+    this.scene.events.emit(EventNames.PLAYER_ROTATE, playerProperties); // Emit "PLAYER_ROTATE" event to the scene with Player properties.
   }
 
   /**
