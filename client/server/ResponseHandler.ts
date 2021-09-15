@@ -245,7 +245,7 @@ export default class Server extends Colyseus.Client {
       case EventNames.BULLET:
         this.scene.events.emit(EventNames.ENEMY_BULLET, message); // Emit "ENEMY_BULLET" event to the scene with message data.
         break;
-      case EventNames.ENEMY_ROTATE:
+      case EventNames.PLAYER_ROTATE:
         this.scene.events.emit(EventNames.ENEMY_ROTATE, message); // Emit "ENEMY_ROTATE" event to the scene with message data.
         break;
       case EventNames.ASTROID_ADDED:
