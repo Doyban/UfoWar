@@ -144,7 +144,7 @@ export default class Server extends Colyseus.Client {
         if (key === this.clientId) {
           const playerProperties = elementProperties; // Assign element's properties to Player properties.
 
-          // Check if player added already if not, add now.
+          // Check if Player added already if not, add now.
           if (!this.isPlayerAdded) {
             this.scene.events.emit(EventNames.PLAYER_ADDED, playerProperties); // Emit "PLAYER_ADDED" event to the scene with Player properties.
             this.isPlayerAdded = true;
@@ -188,14 +188,15 @@ export default class Server extends Colyseus.Client {
 
     let j: number = 0;
     while (j < player.pendingInputs.length) {
-      const input = player.pendingInputs[j];
-      if (input.sequenceNumber <= element.lastProcessedInput) {
+      const playerPendingInputs: any = player.pendingInputs[j]; // Pending inputs to sync moves.
+
+      if (playerPendingInputs.sequenceNumber <= element.lastProcessedInput) {
         // Already processed. Its effect is already taken into account into the world update
         // we just got, so we can drop it.
         player.pendingInputs.splice(j, 1);
       } else {
         // Not processed by the server yet. Re-apply it.
-        player.correctPosition(input);
+        player.correctPosition(playerPendingInputs); // Correct position of Player on client side with server position.
         j++;
       }
     }

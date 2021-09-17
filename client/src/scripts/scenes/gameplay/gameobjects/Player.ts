@@ -186,19 +186,18 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   /**
-   * @function correctPosition
-   * @description this function is responsible to correct position of player on client side with server position
-   * @param inputObj
    * @access public
+   * @description Correct position of Player on client side with server position.
+   * @function correctPosition
+   * @param {any} playerPendingInputs Player's pending inputs
+   * @returns {void}
    */
-  public correctPosition(inputObj) {
-    // console.log('inputObj :>> ', inputObj);
-    if (inputObj.key > 0) {
-      this.x += inputObj.down_time * this.speed;
-      // console.log('this.x :>> ', this.x);
+  public correctPosition(playerPendingInputs: any): void {
+    // Update accordingly x & y positions of the Player.
+    if (playerPendingInputs.key > 0) {
+      this.x += playerPendingInputs.down_time * this.speed;
     } else {
-      console.log("this.y :>> ", this.y);
-      this.y += inputObj.down_time * this.speed;
+      this.y += playerPendingInputs.down_time * this.speed;
     }
   }
 
