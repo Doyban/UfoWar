@@ -203,29 +203,37 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
   /**
    * @access private
+   * @description // Create Player's bullet.
    * @function createPlayerBullet
-   * @description // Create Player's bullet after holding "Space" for 3000 ms.
+   * @returns {void}
    */
-  private createPlayerBullet() {
-    let dome = this.scene.physics.add.sprite(
+  private createPlayerBullet(): void {
+    // Create bullet's sprite with physics.
+    let dome: any = this.scene.physics.add.sprite(
       this.x,
       this.y,
       "shipwear",
       "laserBlue3.png"
     );
-    dome.enableBody(true, dome.x, dome.y, true, true);
-    dome.setScale(0.5, -0.5);
-    dome.rotation = this.rotation;
+
+    dome.enableBody(true, dome.x, dome.y, true, true); // Enable physics for the bullet.
+    dome.setScale(0.5, -0.5); // Scale the bullet in a range.
+    dome.rotation = this.rotation; // Set rotation.
+
+    // Calculate the velocity and return it as a vector.
     this.scene.physics.velocityFromRotation(
-      this.rotation - 4.7,
-      500,
-      dome.body.velocity
+      this.rotation - 4.7, // Rotation, in radians.
+      500, // Speed.
+      dome.body.velocity // The Vector2 in which the x and y properties will be set to the calculated velocity.
     );
+
+    // Emit "BULLET" event to the scene with bullet properties.
     this.scene.events.emit(EventNames.BULLET, {
       x: dome.x,
       y: dome.y,
       rotation: dome.rotation,
     });
-    this.scene.events.emit("addPlayerBullet", dome);
+
+    this.scene.events.emit("addPlayerBullet", dome); // Emit "addPlayerBullet" to the scene with bullet properties.
   }
 }
