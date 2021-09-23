@@ -1,37 +1,45 @@
-import Server from "../../../../server/ResponseHandler";
-import Player from "./gameobjects/Player";
-import Enemy from "./gameobjects/Enemy";
-import { EventNames } from "../../utils/GameConstants";
 import Button from "./gameobjects/Button";
+import Enemy from "./gameobjects/Enemy";
+import Player from "./gameobjects/Player";
+import Server from "../../../../server/ResponseHandler";
+import { EventNames } from "../../utils/GameConstants";
 
 /**
  * @class GamePlayScene
- * @description this class is where all the game objects live
- * @extends `Phaser #scene`
+ * @description Renders gameplay scene with all needed game objects.
+ * @extends Phaser.Scene
  */
 export default class GamePlayScene extends Phaser.Scene {
-  player: Player | null;
   enemy: Enemy | null;
-  server: Server;
-  playBtn: Button | null;
-  intimationText: Phaser.GameObjects.Text | null;
-  gameOverText: Phaser.GameObjects.Text | null;
   enemyBullets: Array<any>;
-  playerBullets: Array<any>;
-  isPlayerDead: boolean;
+  gameOverText: Phaser.GameObjects.Text | null;
+  intimationText: Phaser.GameObjects.Text | null;
   isEnemyDead: boolean;
+  isPlayerDead: boolean;
   obstacles: Array<any>;
+  player: Player | null;
+  playBtn: Button | null;
+  playerBullets: Array<any>;
+  server: Server;
+
+  /**
+   * @constructor
+   * @description Create a new instance of this class.
+   */
   constructor() {
     super({ key: "gameplayscene" });
-    this.player = null;
+
+    // Set up initial values.
     this.enemy = null;
-    this.playBtn = null;
-    this.intimationText = null;
     this.enemyBullets = [];
-    this.obstacles = [];
-    this.playerBullets = [];
+    this.gameOverText = null;
+    this.intimationText = null;
     this.isEnemyDead = false;
     this.isPlayerDead = false;
+    this.obstacles = [];
+    this.player = null;
+    this.playerBullets = [];
+    this.playBtn = null;
   }
 
   /**
