@@ -44,20 +44,19 @@ export default class GamePlayScene extends Phaser.Scene {
 
   /**
    * @access public
-   * @function init
-   * @override `Phaser #init`
-   * @description this function is responsible for all the assets loading
+   * @description Method called before scene is created. Preload all necessary assets for this scene.
+   * @function preload
+   * @override `Phaser.Scene#preload`
+   * @returns {void}
    */
   preload() {
-    this.load.image("background", "assets/images/back.png");
-    this.load.image("astroid", "assets/images/astroid.png");
+    this.load.atlas("gui", "assets/images/gui.png", "assets/json/gui.json");
     this.load.atlas("ship", "assets/images/ship.png", "assets/json/ship.json");
     this.load.atlas(
       "shipwear",
       "assets/images/shipwear.png",
       "assets/json/shipwear.json"
     );
-    this.load.atlas("gui", "assets/images/gui.png", "assets/json/gui.json");
     this.load.atlasXML(
       "sheet",
       "assets/spritesheets/sheet.png",
@@ -68,6 +67,8 @@ export default class GamePlayScene extends Phaser.Scene {
       "assets/spritesheets/spritesheet_regularExplosion.png",
       "assets/spritesheets/spritesheet_regularExplosion.xml"
     );
+    this.load.image("astroid", "assets/images/astroid.png");
+    this.load.image("background", "assets/images/back.png");
   }
 
   /**
