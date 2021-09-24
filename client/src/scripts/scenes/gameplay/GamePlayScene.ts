@@ -49,7 +49,7 @@ export default class GamePlayScene extends Phaser.Scene {
    * @override `Phaser.Scene#preload`
    * @returns {void}
    */
-  preload() {
+  public preload(): void {
     this.load.atlas("gui", "assets/images/gui.png", "assets/json/gui.json");
     this.load.atlas("ship", "assets/images/ship.png", "assets/json/ship.json");
     this.load.atlas(
