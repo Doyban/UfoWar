@@ -73,18 +73,21 @@ export default class GamePlayScene extends Phaser.Scene {
 
   /**
    * @access public
+   * @description Method called once scene is created. Create necessary elements.
    * @function create
-   * @override `Phaser #create`
-   * @description the function in which all the game objects will be rendered
+   * @override `Phaser.Scene#create`
+   * @returns {void}
    */
-  create() {
-    this.server = new Server(this); // create server
-    this.addBackgroundImage(); // adding bg
-    this.addPlayButton(); // adding button to scene
-    this.addIntimationText(); // adding intimation text
-    this.addGameoverText(); // adding gameover text
-    this.addListeners(); // add listeners of the scene
-    this.createExplosionAnimation(); //adding explosion animation to animation manager
+  public create(): void {
+    this.server = new Server(this); // Create server.
+
+    // Create necessary elements.
+    this.addBackgroundImage();
+    this.addGameoverText();
+    this.addIntimationText();
+    this.addListeners();
+    this.addPlayButton();
+    this.createExplosionAnimation();
   }
 
   /**
