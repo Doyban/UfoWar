@@ -107,16 +107,28 @@ export default class GamePlayScene extends Phaser.Scene {
    * @returns {void}
    */
   private addGameoverText(): void {
-    // Set up game over text properties.
+    // Set up text properties.
     this.gameOverText = this.add.text(
       +this.game.config.width / 2,
       250,
       "Game Over"
     );
 
-    this.gameOverText.setFontSize(50);
+    this.gameOverText.setFontSize(50); // Set font size of the text.
     this.gameOverText.setOrigin(0.5); // The default value of "setOrigin" is "0.5", meaning all Game Objects are positioned based on their center.
     this.gameOverText.visible = false; // Make it invisible by default.
+  }
+
+  /**
+   * @access private
+   * @description Creates intimation text.
+   * @function addIntimationText
+   * @returns {void}
+   */
+  private addIntimationText(): void {
+    this.intimationText = this.add.text(+this.game.config.width / 2, 20, ""); // Set up text properties.
+    this.intimationText.setFontSize(25); // Set font size of the text.
+    this.intimationText.setOrigin(0.5); // The default value of "setOrigin" is "0.5", meaning all Game Objects are positioned based on their center.
   }
 
   /**
@@ -156,16 +168,6 @@ export default class GamePlayScene extends Phaser.Scene {
     };
     this.playBtn = new Button(button_config, this);
     this.playBtn.on("pointerup", this.onPlayBtnClick, this);
-  }
-
-  /**
-   * @function addIntimationText
-   * @description this function will add the intimation text to the scene
-   */
-  addIntimationText() {
-    this.intimationText = this.add.text(+this.game.config.width / 2, 20, "");
-    this.intimationText.setOrigin(0.5);
-    this.intimationText.setFontSize(25);
   }
 
   /**
