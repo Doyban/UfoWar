@@ -82,12 +82,26 @@ export default class GamePlayScene extends Phaser.Scene {
     this.server = new Server(this); // Create server.
 
     // Create necessary elements.
+    this.addListeners();
     this.createBackgroundImage();
     this.createExplosionAnimation();
     this.createGameoverText();
     this.createIntimationText();
-    this.addListeners();
     this.addPlayButton();
+  }
+
+  /**
+   * @access private
+   * @description Add listeners of the game objects.
+   * @function addListeners
+   * @returns {void}
+   */
+  private addListeners(): void {
+    this.events.on(EventNames.ASTROID_ADDED, this.onAddAstroid, this);
+    this.events.on(EventNames.ENEMY_BULLET, this.onEnemyFired, this);
+    this.events.on(EventNames.NEW_PLAYER_JOINED, this.onAddEnemy, this);
+    this.events.on(EventNames.PLAYER_ADDED, this.onAddPlayer, this);
+    this.events.on("addPlayerBullet", this.addPlayerBullet, this);
   }
 
   /**
@@ -292,19 +306,6 @@ export default class GamePlayScene extends Phaser.Scene {
         }
       }
     }
-  }
-
-  /**
-   * @function addListeners
-   * @description this function includes all the listeners of this game object
-   * @access private
-   */
-  private addListeners() {
-    this.events.on(EventNames.PLAYER_ADDED, this.onAddPlayer, this);
-    this.events.on(EventNames.NEW_PLAYER_JOINED, this.onAddEnemy, this);
-    this.events.on(EventNames.ENEMY_BULLET, this.onEnemyFired, this);
-    this.events.on(EventNames.ASTROID_ADDED, this.onAddAstroid, this);
-    this.events.on("addPlayerBullet", this.addPlayerBullet, this);
   }
 
   /**
