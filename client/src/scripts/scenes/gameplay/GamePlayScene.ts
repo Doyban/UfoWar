@@ -91,6 +91,16 @@ export default class GamePlayScene extends Phaser.Scene {
   }
 
   /**
+   * @access private
+   * @description Creates background image of the game.
+   * @function createBackground
+   * @returns {void}
+   */
+  private addBackgroundImage(): void {
+    this.add.image(0, 0, "background").setOrigin(0); // Setting the value of "setOrigin" to "0" means the position now relates to the left of the Game Object.
+  }
+
+  /**
    * @function createExplosionAnimation
    * @description this function is responsible for adding explosion animation to the scene
    * @access private
@@ -108,15 +118,6 @@ export default class GamePlayScene extends Phaser.Scene {
       showOnStart: true,
       hideOnComplete: true,
     });
-  }
-
-  /**
-   * @access private
-   * @function addBackgroundImage
-   * @description this function will add the background image to the scene
-   */
-  private addBackgroundImage() {
-    this.add.image(0, 0, "background").setOrigin(0);
   }
 
   /**
