@@ -87,7 +87,7 @@ export default class GamePlayScene extends Phaser.Scene {
     this.createExplosionAnimation();
     this.createGameoverText();
     this.createIntimationText();
-    this.addPlayButton();
+    this.createPlayButton();
   }
 
   /**
@@ -116,7 +116,7 @@ export default class GamePlayScene extends Phaser.Scene {
 
   /**
    * @access private
-   * @description Creates explosion animation to the scene.
+   * @description Creates explosion animation.
    * @function createExplosionAnimation
    * @returns {void}
    */
@@ -169,19 +169,23 @@ export default class GamePlayScene extends Phaser.Scene {
 
   /**
    * @access private
+   * @description Creates play button.
    * @function addPlayButton
-   * @description this function will add the play button to the scene
+   * @returns {void}
    */
-  private addPlayButton() {
+  private createPlayButton(): void {
+    // Set up button properties.
     let button_config = {
-      x: +this.game.config.width / 2,
-      y: +this.game.config.height / 2,
-      texture: "gui",
       frame: "blue_button00.png",
       text: {
         content: "Play",
       },
+      texture: "gui",
+      x: +this.game.config.width / 2,
+      y: +this.game.config.height / 2,
     };
+
+    // Add the button.
     this.playBtn = new Button(button_config, this);
     this.playBtn.on("pointerup", this.onPlayBtnClick, this);
   }
