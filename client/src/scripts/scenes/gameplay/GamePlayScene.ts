@@ -101,6 +101,25 @@ export default class GamePlayScene extends Phaser.Scene {
   }
 
   /**
+   * @access private
+   * @description Creates game over text.
+   * @function addGameoverText
+   * @returns {void}
+   */
+  private addGameoverText(): void {
+    // Set up game over text properties.
+    this.gameOverText = this.add.text(
+      +this.game.config.width / 2,
+      250,
+      "Game Over"
+    );
+
+    this.gameOverText.setFontSize(50);
+    this.gameOverText.setOrigin(0.5); // The default value of "setOrigin" is "0.5", meaning all Game Objects are positioned based on their center.
+    this.gameOverText.visible = false; // Make it invisible by default.
+  }
+
+  /**
    * @function createExplosionAnimation
    * @description this function is responsible for adding explosion animation to the scene
    * @access private
@@ -147,21 +166,6 @@ export default class GamePlayScene extends Phaser.Scene {
     this.intimationText = this.add.text(+this.game.config.width / 2, 20, "");
     this.intimationText.setOrigin(0.5);
     this.intimationText.setFontSize(25);
-  }
-
-  /**
-   * @function addGameoverText
-   * @description this function will add the intimation text to the scene
-   */
-  addGameoverText() {
-    this.gameOverText = this.add.text(
-      +this.game.config.width / 2,
-      250,
-      "Game Over"
-    );
-    this.gameOverText.setOrigin(0.5);
-    this.gameOverText.setFontSize(50);
-    this.gameOverText.visible = false;
   }
 
   /**
