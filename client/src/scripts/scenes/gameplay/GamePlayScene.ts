@@ -82,9 +82,9 @@ export default class GamePlayScene extends Phaser.Scene {
     this.server = new Server(this); // Create server.
 
     // Create necessary elements.
-    this.addBackgroundImage();
-    this.addGameoverText();
-    this.addIntimationText();
+    this.createBackgroundImage();
+    this.createGameoverText();
+    this.createIntimationText();
     this.addListeners();
     this.addPlayButton();
     this.createExplosionAnimation();
@@ -96,17 +96,17 @@ export default class GamePlayScene extends Phaser.Scene {
    * @function createBackground
    * @returns {void}
    */
-  private addBackgroundImage(): void {
+  private createBackgroundImage(): void {
     this.add.image(0, 0, "background").setOrigin(0); // Setting the value of "setOrigin" to "0" means the position now relates to the left of the Game Object.
   }
 
   /**
    * @access private
    * @description Creates game over text.
-   * @function addGameoverText
+   * @function createGameoverText
    * @returns {void}
    */
-  private addGameoverText(): void {
+  private createGameoverText(): void {
     // Set up text properties.
     this.gameOverText = this.add.text(
       +this.game.config.width / 2,
@@ -122,10 +122,10 @@ export default class GamePlayScene extends Phaser.Scene {
   /**
    * @access private
    * @description Creates intimation text.
-   * @function addIntimationText
+   * @function createIntimationText
    * @returns {void}
    */
-  private addIntimationText(): void {
+  private createIntimationText(): void {
     this.intimationText = this.add.text(+this.game.config.width / 2, 20, ""); // Set up text properties.
     this.intimationText.setFontSize(25); // Set font size of the text.
     this.intimationText.setOrigin(0.5); // The default value of "setOrigin" is "0.5", meaning all Game Objects are positioned based on their center.
