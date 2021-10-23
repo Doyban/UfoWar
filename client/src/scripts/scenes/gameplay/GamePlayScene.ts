@@ -1,7 +1,7 @@
 import Button from "./gameobjects/Button";
 import Enemy from "./gameobjects/Enemy";
 import Player from "./gameobjects/Player";
-import Server from "../../../../server/ResponseHandler";
+import Server from "../../../../server/Server";
 import { EventNames } from "../../utils/GameConstants";
 
 /**
