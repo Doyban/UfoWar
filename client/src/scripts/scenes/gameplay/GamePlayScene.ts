@@ -18,7 +18,7 @@ export default class GamePlayScene extends Phaser.Scene {
   isPlayerDead: boolean;
   obstacles: Array<any>;
   player: Player | null;
-  playBtn: Button | null;
+  playButton: Button | null;
   playerBullets: Array<any>;
   server: Server;
 
@@ -37,9 +37,9 @@ export default class GamePlayScene extends Phaser.Scene {
     this.isEnemyDead = false;
     this.isPlayerDead = false;
     this.obstacles = [];
+    this.playButton = null;
     this.player = null;
     this.playerBullets = [];
-    this.playBtn = null;
   }
 
   /**
@@ -123,7 +123,6 @@ export default class GamePlayScene extends Phaser.Scene {
   private createExplosionAnimation(): void {
     // Create animation.
     this.anims.create({
-      key: "explosion",
       frames: this.anims.generateFrameNames("explosion", {
         end: 8,
         prefix: "regularExplosion0",
@@ -132,6 +131,7 @@ export default class GamePlayScene extends Phaser.Scene {
       }),
       frameRate: 16,
       hideOnComplete: true,
+      key: "explosion",
       showOnStart: true,
     });
   }
@@ -170,7 +170,7 @@ export default class GamePlayScene extends Phaser.Scene {
   /**
    * @access private
    * @description Creates play button.
-   * @function addPlayButton
+   * @function createPlayButton
    * @returns {void}
    */
   private createPlayButton(): void {
@@ -186,8 +186,8 @@ export default class GamePlayScene extends Phaser.Scene {
     };
 
     // Add the button.
-    this.playBtn = new Button(button_config, this);
-    this.playBtn.on("pointerup", this.onPlayBtnClick, this);
+    this.playButton = new Button(button_config, this);
+    this.playButton.on("pointerup", this.onPlayButtonClick, this);
   }
 
   /**
@@ -369,12 +369,12 @@ export default class GamePlayScene extends Phaser.Scene {
   }
 
   /**
-   * @function onPlayBtnClick
+   * @function onPlayButtonClick
    * @description this function will be called once play button clicked
    * @access private
    */
-  private onPlayBtnClick() {
-    this.playBtn.hide(); // hiding play button
+  private onPlayButtonClick() {
+    this.playButton.hide(); // hiding play button
     this.server.connect(); // trying to establish a connection to server
   }
 
