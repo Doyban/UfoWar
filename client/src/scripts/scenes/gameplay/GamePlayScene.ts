@@ -83,11 +83,11 @@ export default class GamePlayScene extends Phaser.Scene {
 
     // Create necessary elements.
     this.createBackgroundImage();
+    this.createExplosionAnimation();
     this.createGameoverText();
     this.createIntimationText();
     this.addListeners();
     this.addPlayButton();
-    this.createExplosionAnimation();
   }
 
   /**
@@ -98,6 +98,28 @@ export default class GamePlayScene extends Phaser.Scene {
    */
   private createBackgroundImage(): void {
     this.add.image(0, 0, "background").setOrigin(0); // Setting the value of "setOrigin" to "0" means the position now relates to the left of the Game Object.
+  }
+
+  /**
+   * @access private
+   * @description Creates explosion animation to the scene.
+   * @function createExplosionAnimation
+   * @returns {void}
+   */
+  private createExplosionAnimation(): void {
+    // Create animation.
+    this.anims.create({
+      key: "explosion",
+      frames: this.anims.generateFrameNames("explosion", {
+        end: 8,
+        prefix: "regularExplosion0",
+        suffix: ".png",
+        start: 0,
+      }),
+      frameRate: 16,
+      hideOnComplete: true,
+      showOnStart: true,
+    });
   }
 
   /**
@@ -129,26 +151,6 @@ export default class GamePlayScene extends Phaser.Scene {
     this.intimationText = this.add.text(+this.game.config.width / 2, 20, ""); // Set up text properties.
     this.intimationText.setFontSize(25); // Set font size of the text.
     this.intimationText.setOrigin(0.5); // The default value of "setOrigin" is "0.5", meaning all Game Objects are positioned based on their center.
-  }
-
-  /**
-   * @function createExplosionAnimation
-   * @description this function is responsible for adding explosion animation to the scene
-   * @access private
-   */
-  private createExplosionAnimation() {
-    this.anims.create({
-      key: "explosion",
-      frames: this.anims.generateFrameNames("explosion", {
-        prefix: "regularExplosion0",
-        suffix: ".png",
-        end: 8,
-        start: 0,
-      }),
-      frameRate: 16,
-      showOnStart: true,
-      hideOnComplete: true,
-    });
   }
 
   /**
