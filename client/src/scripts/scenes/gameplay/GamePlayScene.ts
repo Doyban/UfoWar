@@ -97,11 +97,39 @@ export default class GamePlayScene extends Phaser.Scene {
    * @returns {void}
    */
   private addListeners(): void {
-    this.events.on(EventNames.ASTROID_ADDED, this.onAddAstroid, this);
+    this.events.on(EventNames.ASTROID_ADDED, this.onAddAstroid, this); // Listener for adding Astroid game object to the game event.
     this.events.on(EventNames.ENEMY_BULLET, this.onEnemyFired, this);
     this.events.on(EventNames.NEW_PLAYER_JOINED, this.onAddEnemy, this);
     this.events.on(EventNames.PLAYER_ADDED, this.onAddPlayer, this);
     this.events.on("addPlayerBullet", this.addPlayerBullet, this);
+  }
+
+  /**
+   * @access private
+   * @description Listener for adding Astroid game object to the game event.
+   * @function onAddAstroid
+   * @param {any} [astroidProperties] Astroid properties
+   * @returns {void}
+   */
+  private onAddAstroid(astroidProperties: any): void {
+    // Create sprite with physics.
+    let astroid: Phaser.Physics.Arcade.Sprite = this.physics.add.sprite(
+      astroidProperties.x,
+      astroidProperties.y,
+      "astroid"
+    );
+
+    astroid.enableBody(true, astroid.x, astroid.y, true, true); // Enable physics.
+    astroid.setScale(astroidProperties.scale.x, astroidProperties.scale.y); // Scale the object in a range.
+
+    // Calculate the velocity and return it as a vector.
+    this.physics.velocityFromRotation(
+      astroidProperties.rotation, // Rotation, in radians.
+      astroidProperties.speed, // Speed.
+      astroid.body.velocity // The Vector2 in which the x and y properties will be set to the calculated velocity.
+    );
+
+    astroid.setDepth(1); // Depth of this game object within this scene (rendering position), also known as 'z-index' in CSS.
   }
 
   /**
@@ -386,25 +414,6 @@ export default class GamePlayScene extends Phaser.Scene {
    */
   private addPlayerBullet(bullet) {
     this.playerBullets.push(bullet);
-  }
-
-  /**
-   * @function onAddAstroid
-   * @description this function will be responsible for adding astroid game object to the scene
-   * @param obj
-   * @access private
-   */
-  private onAddAstroid(obj) {
-    let astroid = this.physics.add.sprite(obj.x, obj.y, "astroid");
-    astroid.enableBody(true, astroid.x, astroid.y, true, true);
-    astroid.setScale(obj.scale.x, obj.scale.y);
-    this.physics.velocityFromRotation(
-      obj.rotation,
-      obj.speed,
-      astroid.body.velocity
-    );
-    astroid.setDepth(1);
-    // this.enemyBullets.push(dome);
   }
 
   /**
