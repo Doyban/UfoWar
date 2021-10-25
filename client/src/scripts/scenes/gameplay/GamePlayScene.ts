@@ -98,9 +98,9 @@ export default class GamePlayScene extends Phaser.Scene {
    */
   private addListeners(): void {
     this.events.on(EventNames.ASTROID_ADDED, this.onAddAstroid, this); // Listener for adding Astroid game object to the game event.
+    this.events.on(EventNames.PLAYER_ADDED, this.onAddPlayer, this); // Listener for adding Player game object to the game event.
     this.events.on(EventNames.ENEMY_BULLET, this.onEnemyFired, this);
     this.events.on(EventNames.NEW_PLAYER_JOINED, this.onAddEnemy, this);
-    this.events.on(EventNames.PLAYER_ADDED, this.onAddPlayer, this);
     this.events.on("addPlayerBullet", this.addPlayerBullet, this);
   }
 
@@ -130,6 +130,30 @@ export default class GamePlayScene extends Phaser.Scene {
     );
 
     astroid.setDepth(1); // Depth of this game object within this scene (rendering position), also known as 'z-index' in CSS.
+  }
+
+  /**
+   * @access private
+   * @description Listener for adding Player game object to the game event.
+   * @function onAddPlayer
+   * @param {any} [playerProperties] Player properties
+   * @returns {void}
+   */
+  private onAddPlayer(playerProperties: any): void {
+    // Create Player config.
+    let playerConfig: { frame: string; texture: string } = {
+      frame: "shipBeige_manned.png",
+      texture: "ship",
+    };
+
+    // Create Player object config by merging Player's config and properties.
+    let configPlayer: object = Phaser.Utils.Objects.Merge(
+      playerConfig,
+      playerProperties
+    );
+
+    this.player = new Player(configPlayer, this); // Create Player with given config.
+    this.server.players[playerProperties.id] = this.player; // Insert Player to Players array of server.
   }
 
   /**
@@ -338,22 +362,6 @@ export default class GamePlayScene extends Phaser.Scene {
         }
       }
     }
-  }
-
-  /**
-   * @function onAddPlayer
-   * @description this function will render the player ship with given properties by server
-   * @access private
-   */
-  private onAddPlayer(obj: any) {
-    let playerConfig = {
-      texture: "ship",
-      frame: "shipBeige_manned.png",
-    };
-    let config = Phaser.Utils.Objects.Merge(obj, playerConfig);
-    this.player = new Player(config, this);
-    // inserting players to players array of server
-    this.server.players[obj.id] = this.player;
   }
 
   /**
