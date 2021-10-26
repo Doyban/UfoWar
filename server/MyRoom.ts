@@ -115,7 +115,7 @@ export class MyRoom extends Room {
    */
   notifyOtherPlayers(client: Client) {
     this.broadcast(
-      EventNames.NEW_PLAYER_JOINED,
+      EventNames.ENEMY_ADDED,
       {
         client: client,
         player: this.state.players[client.sessionId],

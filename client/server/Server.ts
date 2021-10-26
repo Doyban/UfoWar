@@ -157,11 +157,8 @@ export default class Server extends Colyseus.Client {
           const enemyProperties = elementProperties; // Assign element's properties to Enemy properties.
           // Check if enemy added already if not, add now.
           if (!this.isEnemyAdded) {
-            // Emit "NEW_PLAYER_JOINED" event to the scene with Enemy properties.
-            this.scene.events.emit(
-              EventNames.NEW_PLAYER_JOINED,
-              enemyProperties
-            );
+            // Emit "ENEMY_ADDED" event to the scene with Enemy properties.
+            this.scene.events.emit(EventNames.ENEMY_ADDED, enemyProperties);
 
             this.isEnemyAdded = true;
           } else {
@@ -240,7 +237,7 @@ export default class Server extends Colyseus.Client {
       case EventNames.PLAYER_LEFT:
         this.onPlayerLeft(type, message); // Update gameplay after the player will leave the game.
         break;
-      case EventNames.NEW_PLAYER_JOINED:
+      case EventNames.ENEMY_ADDED:
         this.newPlayerJoin(type, message); // Update gameplay after the player will join the game.
         break;
       case EventNames.BULLET:

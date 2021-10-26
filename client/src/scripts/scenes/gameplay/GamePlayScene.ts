@@ -98,9 +98,9 @@ export default class GamePlayScene extends Phaser.Scene {
    */
   private addListeners(): void {
     this.events.on(EventNames.ASTROID_ADDED, this.onAddAstroid, this); // Listener for adding Astroid game object to the game event.
+    this.events.on(EventNames.ENEMY_ADDED, this.onAddEnemy, this); // Listener for adding Enemy game object to the game event.
     this.events.on(EventNames.PLAYER_ADDED, this.onAddPlayer, this); // Listener for adding Player game object to the game event.
     this.events.on(EventNames.ENEMY_BULLET, this.onEnemyFired, this);
-    this.events.on(EventNames.NEW_PLAYER_JOINED, this.onAddEnemy, this);
     this.events.on("addPlayerBullet", this.addPlayerBullet, this);
   }
 
@@ -134,6 +134,31 @@ export default class GamePlayScene extends Phaser.Scene {
 
   /**
    * @access private
+   * @description Listener for adding Enemy game object to the game event.
+   * @function onAddEnemy
+   * @param {any} [enemyProperties] Enemy properties
+   * @returns {void}
+   */
+  private onAddEnemy(enemyProperties: any): void {
+    // Create Enemy config.
+    let enemyConfig = {
+      frame: "shipBlue_manned.png",
+      texture: "ship",
+    };
+
+    // Create Enemy object config by merging Enemy's config and properties.
+    // !Important: these parameters have to be in such an order.
+    let config: object = Phaser.Utils.Objects.Merge(
+      enemyProperties,
+      enemyConfig
+    );
+
+    this.enemy = new Enemy(config, this); // Create Enemy with given config.
+    this.server.players[enemyProperties.id] = this.enemy; // Insert Enemy to Players array of server.
+  }
+
+  /**
+   * @access private
    * @description Listener for adding Player game object to the game event.
    * @function onAddPlayer
    * @param {any} [playerProperties] Player properties
@@ -147,6 +172,7 @@ export default class GamePlayScene extends Phaser.Scene {
     };
 
     // Create Player object config by merging Player's config and properties.
+    // !Important: these parameters have to be in such an order.
     let configPlayer: object = Phaser.Utils.Objects.Merge(
       playerConfig,
       playerProperties
@@ -362,23 +388,6 @@ export default class GamePlayScene extends Phaser.Scene {
         }
       }
     }
-  }
-
-  /**
-   * @function onAddEnemy
-   * @description this function will render the enemy ship with given properties by server
-   * @access private
-   */
-  private onAddEnemy(obj: any) {
-    // console.trace(obj);
-    let enemyConfig = {
-      texture: "ship",
-      frame: "shipBlue_manned.png",
-    };
-    let config = Phaser.Utils.Objects.Merge(obj, enemyConfig);
-    this.enemy = new Enemy(config, this);
-    // adding enemy to players array of server
-    this.server.players[obj.id] = this.enemy;
   }
 
   /**

@@ -8,7 +8,7 @@ export const EventNames = {
   MOVE_LEFT: "movePlayerLeft",
   MOVE_RIGHT: "movePlayerRight",
   MOVE_UP: "movePlayerTop",
-  NEW_PLAYER_JOINED: "newPlayerJoined",
+  ENEMY_ADDED: "newPlayerJoined",
   PLAYER_DEAD: "playerDead",
   PLAYER_LEFT: "playerleft",
   PLAYER_ROTATE: "rotate", // TODO: Changing this to "playerRotate" breaks rotating.
