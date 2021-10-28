@@ -100,7 +100,7 @@ export default class GamePlayScene extends Phaser.Scene {
     this.events.on(EventNames.ASTROID_ADDED, this.onAddAstroid, this); // Listener for adding Astroid game object to the game event.
     this.events.on(EventNames.ENEMY_ADDED, this.onAddEnemy, this); // Listener for adding Enemy game object to the game event.
     this.events.on(EventNames.PLAYER_ADDED, this.onAddPlayer, this); // Listener for adding Player game object to the game event.
-    this.events.on(EventNames.ENEMY_BULLET, this.onEnemyFired, this);
+    this.events.on(EventNames.ENEMY_BULLET, this.onFireBulletEnemy, this); // Listener for firing bullet by the Player game object to the game event.
     this.events.on("addPlayerBullet", this.addPlayerBullet, this);
   }
 
@@ -180,6 +180,36 @@ export default class GamePlayScene extends Phaser.Scene {
 
     this.player = new Player(configPlayer, this); // Create Player with given config.
     this.server.players[playerProperties.id] = this.player; // Insert Player to Players array of server.
+  }
+
+  /**
+   * @access private
+   * @description Listener for firing bullet by the Player game object to the game event.
+   * @function onFireBulletEnemy
+   * @param {any} [enemyProperties] Enemy properties
+   * @returns {void}
+   */
+  private onFireBulletEnemy(enemyProperties: any): void {
+    // Create sprite with physics.
+    let dome = this.physics.add.sprite(
+      enemyProperties.x,
+      enemyProperties.y,
+      "shipwear",
+      "laserBeige3.png"
+    );
+
+    dome.enableBody(true, dome.x, dome.y, true, true); // Enable physics.
+    dome.setScale(0.5, -0.5); // Scale the object in a range.
+    dome.rotation = enemyProperties.rotation; // Set rotation.
+
+    // Calculate the velocity and return it as a vector.
+    this.physics.velocityFromRotation(
+      dome.rotation - 4.7, // Rotation, in radians.
+      500, // Speed.
+      dome.body.velocity // The Vector2 in which the x and y properties will be set to the calculated velocity.
+    );
+
+    this.enemyBullets.push(dome); // Push bullet to Enemy bullets array.
   }
 
   /**
@@ -388,29 +418,6 @@ export default class GamePlayScene extends Phaser.Scene {
         }
       }
     }
-  }
-
-  /**
-   * @function onEnemyFired
-   * @description this function will render the enemy ship bullet with given properties by server
-   * @access private
-   */
-  private onEnemyFired(obj: any) {
-    let dome = this.physics.add.sprite(
-      obj.x,
-      obj.y,
-      "shipwear",
-      "laserBeige3.png"
-    );
-    dome.enableBody(true, dome.x, dome.y, true, true);
-    dome.setScale(0.5, -0.5);
-    dome.rotation = obj.rotation;
-    this.physics.velocityFromRotation(
-      dome.rotation - 4.7,
-      500,
-      dome.body.velocity
-    ); // physics function to make movement from the current rotation of the object
-    this.enemyBullets.push(dome); // pushing bullet to enemy bullets array
   }
 
   /**
