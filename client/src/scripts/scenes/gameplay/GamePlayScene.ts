@@ -400,7 +400,7 @@ export default class GamePlayScene extends Phaser.Scene {
             this.player.play("explosion", true, 0);
             // this.player.destroy(false);
             console.log("collided :>> ", "player dead");
-            this.playGameOverTextAnim();
+            this.playGameOverTextAnimation();
           }
         }
       }
@@ -424,7 +424,7 @@ export default class GamePlayScene extends Phaser.Scene {
             this.intimationText.setText("you have won");
             this.isEnemyDead = true;
             console.log("collided :>> ", "enemy dead");
-            this.playGameOverTextAnim();
+            this.playGameOverTextAnimation();
           }
         }
       }
@@ -442,14 +442,17 @@ export default class GamePlayScene extends Phaser.Scene {
   }
 
   /**
-   * @function playGameOverTextAnim
-   * @description this function is responsible for playing gameover text animation
    * @access private
+   * @description Play Game Over animation.
+   * @function playGameOverTextAnimation
+   * @returns {void}
    */
-  private playGameOverTextAnim() {
-    this.gameOverText.visible = true; // make gameover text visible if it is not
+  private playGameOverTextAnimation(): void {
+    this.gameOverText.visible = true; // Make it visible.
+
+    // Create animation.
     this.tweens.add({
-      targets: this.gameOverText,
+      duration: 1000,
       props: {
         scaleX: {
           from: 0,
@@ -460,7 +463,7 @@ export default class GamePlayScene extends Phaser.Scene {
           to: 1,
         },
       },
-      duration: 1000,
+      targets: this.gameOverText,
     });
   }
 }
