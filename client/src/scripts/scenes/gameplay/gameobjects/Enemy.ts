@@ -38,19 +38,9 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
    * @returns {void}
    */
   private addListeners(): void {
-    this.scene.events.on(EventNames.PLAYER_LEFT, this.onPlayerLeft, this); // Listener for leaving the game event by the Player.
     this.scene.events.on("enemymoved", this.onMoveEnemy, this); // Listener for Enemy move event.
+    this.scene.events.on(EventNames.PLAYER_LEFT, this.onPlayerLeft, this); // Listener for leaving the game event by the Player.
     this.scene.events.on(EventNames.ENEMY_ROTATE, this.onRotateEnemy, this); // Listener for rotate Enemy event.
-  }
-
-  /**
-   * @access private
-   * @description Listener for leaving the game event by the Player.
-   * @function onPlayerLeft
-   * @returns {void}
-   */
-  private onPlayerLeft(): void {
-    this.destroy(true); // Destroy the Enemy.
   }
 
   /**
@@ -64,6 +54,16 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     // Update position properties of the Enemy.
     this.x += (enemyProperties.x - this.x) * 0.5;
     this.y += (enemyProperties.y - this.y) * 0.5;
+  }
+
+  /**
+   * @access private
+   * @description Listener for leaving the game event by the Player.
+   * @function onPlayerLeft
+   * @returns {void}
+   */
+  private onPlayerLeft(): void {
+    this.destroy(true); // Destroy the Enemy.
   }
 
   /**

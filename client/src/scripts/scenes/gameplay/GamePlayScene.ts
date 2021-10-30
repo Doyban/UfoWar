@@ -189,7 +189,7 @@ export default class GamePlayScene extends Phaser.Scene {
    * @param {any} [bullet] Player's bullet
    * @returns {void}
    */
-  private onAddPlayerBullet(bullet): void {
+  private onAddPlayerBullet(bullet: any): void {
     this.playerBullets.push(bullet); // Push bullet to Player bullets array.
   }
 
