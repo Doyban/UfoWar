@@ -100,8 +100,8 @@ export default class GamePlayScene extends Phaser.Scene {
     this.events.on(EventNames.ASTROID_ADDED, this.onAddAstroid, this); // Listener for adding Astroid game object to the game event.
     this.events.on(EventNames.ENEMY_ADDED, this.onAddEnemy, this); // Listener for adding Enemy game object to the game event.
     this.events.on(EventNames.PLAYER_ADDED, this.onAddPlayer, this); // Listener for adding Player game object to the game event.
+    this.events.on("addPlayerBullet", this.onAddPlayerBullet, this); // Listener for adding Player bullet object to the game event.
     this.events.on(EventNames.ENEMY_BULLET, this.onFireBulletEnemy, this); // Listener for firing bullet by the Player game object to the game event.
-    this.events.on("addPlayerBullet", this.addPlayerBullet, this);
   }
 
   /**
@@ -180,6 +180,17 @@ export default class GamePlayScene extends Phaser.Scene {
 
     this.player = new Player(configPlayer, this); // Create Player with given config.
     this.server.players[playerProperties.id] = this.player; // Insert Player to Players array of server.
+  }
+
+  /**
+   * @access private
+   * @description Listener for adding Player bullet object to the game event.
+   * @function onAddPlayerBullet
+   * @param {any} [bullet] Player's bullet
+   * @returns {void}
+   */
+  private onAddPlayerBullet(bullet): void {
+    this.playerBullets.push(bullet); // Push bullet to Player bullets array.
   }
 
   /**
@@ -428,16 +439,6 @@ export default class GamePlayScene extends Phaser.Scene {
   private onPlayButtonClick() {
     this.playButton.hide(); // hiding play button
     this.server.connect(); // trying to establish a connection to server
-  }
-
-  /**
-   * @function addPlayerBullet
-   * @description this function will be responsible to add bullet object to player but=llets array
-   * @param bullet
-   * @access private
-   */
-  private addPlayerBullet(bullet) {
-    this.playerBullets.push(bullet);
   }
 
   /**
