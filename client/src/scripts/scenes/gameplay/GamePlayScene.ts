@@ -311,120 +311,130 @@ export default class GamePlayScene extends Phaser.Scene {
 
   /**
    * @access public
+   * @description Method invoked all the time during the game. Listens to the changes of this game object properties and rerenders every frame.
    * @function update
-   * @override `Phaser #update`
-   * @description the update function which executes at given fps
-   * @param {number} time The time value from the most recent Game step. Typically a high-resolution timer value, or Date.now().
-   * @param {number} deltaTime The delta value since the last frame. This is smoothed to avoid delta spikes by the TimeStep class.
+   * @override `Phaser.Gameobjects#update`
+   * @param {number} [deltaTime] the delta value since the last frame, this is smoothed to avoid delta spikes by the TimeStep class
+   * @param {number} [time] The time value from the most recent Game step. Typically a high-resolution timer value, or Date.now()
+   * @returns {void}
    */
-  update(time, delta) {
-    // will run the update function on all the game objects of the scene
+  public update(time: number, deltaTime: number): void {
+    // Run the update function on all the game objects of the scene.
     this.children.each((child) => {
-      child.update(time, delta);
+      child.update(time, deltaTime);
     });
-    // update intimation text
+
+    // Update intimation text.
     if (this.intimationText) {
-      let playersCount = Object.keys(this.server.players).length;
-      if (playersCount == 1) {
-        this.intimationText.setVisible(true);
-        this.intimationText.setText("waiting for opponent to connect");
+      let playersCount = Object.keys(this.server.players).length; // Get Players count from the server.
+
+      // Update intimation text accordingly.
+      if (playersCount === 1) {
+        this.intimationText.setVisible(true); // Make it visible.
+        this.intimationText.setText("waiting for opponent to connect"); // Set text to display.
       } else if (!this.isPlayerDead && !this.isEnemyDead && playersCount == 2) {
-        this.intimationText.setText("");
-        this.intimationText.setVisible(false);
+        this.intimationText.setText(""); // Set text to be empty.
+        this.intimationText.setVisible(false); // Make it invisible.
       }
     }
-    // kill bullets if out of bounds
+
+    // Kill Enemy bullets if those went out of boundaries.
     if (this.enemyBullets) {
-      for (let i = 0; i < this.enemyBullets.length; i++) {
-        const enemyBullet = this.enemyBullets[i];
-        // check if enemy bullet is out of bounds
+      for (let i: number = 0; i < this.enemyBullets.length; i++) {
+        const enemyBullet: any = this.enemyBullets[i]; // Fetch single bullet.
+
+        // Check if single bullet is out of boundaries.
         if (
           enemyBullet.x < 0 ||
           enemyBullet.x > this.game.config.width ||
           enemyBullet.y < 0 ||
           enemyBullet.y > this.game.config.height
         ) {
-          enemyBullet.destroy();
-          this.enemyBullets.splice(i, i + 1);
+          enemyBullet.destroy(); // Destroy the bullet.
+          this.enemyBullets.splice(i, i + 1); // Remove the bullet from the bullets array.
         }
       }
     }
-    // kill bullets of player if they are out of bounds
+
+    // Kill Player bullets if those went out of boundaries.
     if (this.playerBullets) {
-      for (let i = 0; i < this.playerBullets.length; i++) {
-        const playerBullet = this.playerBullets[i];
-        // check if player bullet is out of bounds
+      for (let i: number = 0; i < this.playerBullets.length; i++) {
+        const playerBullet = this.playerBullets[i]; // Fetch single bullet.
+
+        // Check if single bullet is out of boundaries.
         if (
           playerBullet.x < 0 ||
           playerBullet.x > this.game.config.width ||
           playerBullet.y < 0 ||
           playerBullet.y > this.game.config.height
         ) {
-          playerBullet.destroy();
-          this.playerBullets.splice(i, i + 1);
+          playerBullet.destroy(); // Destroy the bullet.
+          this.playerBullets.splice(i, i + 1); // Remove the bullet from the bullets array.
         }
       }
     }
-    // kill obstacles if they are out of bounds
+
+    // Kill obstacles if those went out of boundaries.
     if (this.obstacles) {
-      for (let i = 0; i < this.obstacles.length; i++) {
-        const obstacle = this.obstacles[i];
-        // check if obstacles are out of bounds
+      for (let i: number = 0; i < this.obstacles.length; i++) {
+        const obstacle = this.obstacles[i]; // Fetch single obstacle.
+
+        // Check if single obtsacle is out of boundaries.
         if (
           obstacle.x < 0 ||
           obstacle.x > this.game.config.width ||
           obstacle.y < 0 ||
           obstacle.y > this.game.config.height
         ) {
-          obstacle.destroy();
-          this.obstacles.splice(i, i + 1);
+          obstacle.destroy(); // Destroy the obstacle.
+          this.obstacles.splice(i, i + 1); // Remove the obstacle from the obstacles array.
         }
       }
     }
-    // kill player if enemy bullets hits
+
+    // Kill Player if Enemy bullets hits the Player.
     if (this.player) {
-      for (let i = 0; i < this.enemyBullets.length; i++) {
-        const enemyBullet = this.enemyBullets[i];
-        // checking collision between enemy bullets and player
+      for (let i: number = 0; i < this.enemyBullets.length; i++) {
+        const enemyBullet = this.enemyBullets[i]; // Fetch single bullet.
+
+        // Checking collision between Enemy bullets and Player.
         if (
           this.player.x < enemyBullet.x + enemyBullet.width &&
           this.player.x + this.player.width > enemyBullet.x &&
           this.player.y < enemyBullet.y + enemyBullet.height &&
           this.player.y + this.player.height > enemyBullet.y
         ) {
+          // Make sure Player is not dead.
           if (!this.isPlayerDead) {
-            // this.events.emit(EventNames.PLAYER_DEAD);
-            this.intimationText.visible = true;
-            this.intimationText.setText("you have lost");
-            this.isPlayerDead = true;
-            this.player.play("explosion", true, 0);
-            // this.player.destroy(false);
-            console.log("collided :>> ", "player dead");
-            this.playGameOverTextAnimation();
+            this.player.play("explosion", true, 0); // Play explosion animation.
+            this.intimationText.setText("you have lost"); // Set text to display.
+            this.intimationText.visible = true; // Make the text visible.
+            this.isPlayerDead = true; // Set Player to be dead.
+            this.playGameOverTextAnimation(); // Play Game Over text animation.
           }
         }
       }
     }
-    // kill enemy if player bullet hits
+
+    // Kill Enemy if Player bullets hits the Enemy.
     if (this.enemy) {
-      for (let i = 0; i < this.playerBullets.length; i++) {
-        const playerBullet = this.playerBullets[i];
-        // checking collision between enemy and player bullets
+      for (let i: number = 0; i < this.playerBullets.length; i++) {
+        const playerBullet = this.playerBullets[i]; // Fetch single bullet.
+
+        // Checking collision between Player bullets and Enemy.
         if (
           this.enemy.x < playerBullet.x + playerBullet.width &&
           this.enemy.x + this.enemy.width > playerBullet.x &&
           this.enemy.y < playerBullet.y + playerBullet.height &&
           this.enemy.y + this.enemy.height > playerBullet.y
         ) {
+          // Make sure Enemy is not dead.
           if (!this.isEnemyDead) {
-            // this.events.emit(EventNames.ENEMY_DEAD);
-            // this.enemy.destroy(false);
-            this.enemy.play("explosion", true, 0);
-            this.intimationText.visible = true;
-            this.intimationText.setText("you have won");
-            this.isEnemyDead = true;
-            console.log("collided :>> ", "enemy dead");
-            this.playGameOverTextAnimation();
+            this.enemy.play("explosion", true, 0); // Play explosion animation.
+            this.intimationText.setText("you have won"); // Set text to display.
+            this.intimationText.visible = true; // Make the text visible.
+            this.isEnemyDead = true; // Set Enemy to be dead.
+            this.playGameOverTextAnimation(); // Play Game Over text animation.
           }
         }
       }
@@ -443,7 +453,7 @@ export default class GamePlayScene extends Phaser.Scene {
 
   /**
    * @access private
-   * @description Play Game Over animation.
+   * @description Play Game Over text animation.
    * @function playGameOverTextAnimation
    * @returns {void}
    */
