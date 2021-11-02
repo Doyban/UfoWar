@@ -83,12 +83,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
    * @description Method invoked all the time during the game. Listens to the changes of this game object properties and rerenders every frame.
    * @function update
    * @override `Phaser.Gameobjects#update`
-   * @param {number} [deltaTime] the delta value since the last frame, this is smoothed to avoid delta spikes by the TimeStep class
+   * @param {number} [deltaTime] the delta value since the last frame, this is smoothed to avoid delta spikes by the class
    * @param {number} [time] The time value from the most recent Game step. Typically a high-resolution timer value, or Date.now()
    * @returns {void}
    * !Important: the "time" parameter has to be here, otherwise it breaks the game, i.e., the player disappears after first keystroke.
    */
-  public update(time: number, deltaTime: number) {
+  public update(time: number, deltaTime: number): void {
     let playerProperties: { down_time: number } = { down_time: deltaTime };
 
     // Check if the keyboard button "Up" is currently being held down with at least 100 ms must have elapsed to before this Key is considered down.
