@@ -304,9 +304,19 @@ export default class GamePlayScene extends Phaser.Scene {
       y: +this.game.config.height / 2,
     };
 
-    // Add the button.
-    this.playButton = new Button(button_config, this);
-    this.playButton.on("pointerup", this.onPlayButtonClick, this);
+    this.playButton = new Button(button_config, this); // Add the button.
+    this.playButton.on("pointerup", this.onPlayButtonClick, this); // Listener for play button click event.
+  }
+
+  /**
+   * @access private
+   * @function onPlayButtonClick
+   * @description Listener for play button click event.
+   * @returns {void}
+   */
+  private onPlayButtonClick(): void {
+    this.playButton.hide(); // Hide play button.
+    this.server.connect(); // Establish connection between client and server.
   }
 
   /**
@@ -439,16 +449,6 @@ export default class GamePlayScene extends Phaser.Scene {
         }
       }
     }
-  }
-
-  /**
-   * @function onPlayButtonClick
-   * @description this function will be called once play button clicked
-   * @access private
-   */
-  private onPlayButtonClick() {
-    this.playButton.hide(); // hiding play button
-    this.server.connect(); // trying to establish a connection to server
   }
 
   /**
