@@ -1,27 +1,23 @@
-import http from "http";
-import express from "express";
 import cors from "cors";
-import { Server } from "colyseus";
-
+import express from "express";
+import http from "http";
 import { MyRoom } from "./MyRoom";
+import { Server as ColyseusServer } from "colyseus";
 
+// Basic settings.
 const port = Number(process.env.PORT || 2567);
 const app = express();
-
 app.use(cors());
-app.use(express.json());
 
-// create http server
+app.use(express.json()); // Parse JSON payloads.
+
+// Create HTTP server and add it to Colyseus Server.
 const server = http.createServer(app);
-
-// add http server to colyseus
-const gameServer = new Server({
+const gameServer = new ColyseusServer({
   server,
 });
 
-// register your room handlers
+// Register room handlers and listen to the port.
 gameServer.define("my_room", MyRoom);
-
-// listen to port
 gameServer.listen(port);
 console.log(`Listening on ws://localhost:${port}`);
