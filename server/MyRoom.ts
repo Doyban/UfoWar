@@ -30,7 +30,7 @@ export class MyRoom extends Room {
    */
   onJoin(client: Client, options: any) {
     // console.log('options :>> ', options);
-    this.state.setGameBounds(options);
+    this.state.setGameBoundaries(options);
     this.state.players[client.sessionId] = new Player();
     this.state.positionPlayer(client.sessionId);
     this.notifyOtherPlayers(client);
@@ -64,7 +64,7 @@ export class MyRoom extends Room {
     // console.log(`message from client ${ client.id } :>> `, type, message);
     if (type === EventNames.BULLET) {
       //check if message is bullet
-      this.state.fireBullet(client.sessionId, type, message);
+      this.state.fireBullet(client.sessionId, message);
       // brodcast a message to add bullet object of this client id on all other player worlds
       this.broadcast(type, message, {
         except: client,
@@ -77,7 +77,7 @@ export class MyRoom extends Room {
       });
     } else {
       // move player
-      this.state.movePlayer(client.sessionId, type, message);
+      this.state.updatePlayerPosition(client.sessionId, message);
     }
   }
 
