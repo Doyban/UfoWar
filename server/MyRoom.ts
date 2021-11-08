@@ -1,12 +1,12 @@
-import { Room, Client } from "colyseus";
-import State from "./State";
 import Player from "./schemas/Player";
+import State from "./State";
+import { Client, Room } from "colyseus";
 import { EventNames } from "./utils/EventNames";
 
 /**
  * @class MyRoom
- * @description game state room object
- * @extends Colyseus#Room
+ * @description Creates game state room game object.
+ * @extends Colyseus.Room
  */
 export class MyRoom extends Room {
   /**
@@ -29,7 +29,6 @@ export class MyRoom extends Room {
    * @param options
    */
   onJoin(client: Client, options: any) {
-    // console.log('options :>> ', options);
     this.state.setGameBoundaries(options);
     this.state.players[client.sessionId] = new Player();
     this.state.positionPlayer(client.sessionId);
@@ -49,10 +48,6 @@ export class MyRoom extends Room {
     }
   }
 
-  onDispose() {
-    // console.log('disposed :>> ');
-  }
-
   /**
    * @function onMessageFromClient
    * @description this function responsible for listening to all the players messages
@@ -61,7 +56,6 @@ export class MyRoom extends Room {
    * @param message any payload object that is sent by client
    */
   onMessageFromClient(client: Client, type: string | number, message: any) {
-    // console.log(`message from client ${ client.id } :>> `, type, message);
     if (type === EventNames.BULLET) {
       //check if message is bullet
       this.state.fireBullet(client.sessionId, message);
