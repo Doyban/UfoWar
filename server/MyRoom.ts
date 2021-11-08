@@ -40,7 +40,7 @@ export class MyRoom extends Room {
    * @callback onLeave
    * @description Called when a client (Player) leaves the room.
    * @override `Colyseus.Room#onLeave`
-   * @param {Client} client Client (Player) that is still left in the room.
+   * @param {Client} client Client (Player) that is still left in the room
    * @param {boolean} consented Flag to check whether disconnection was initiated by the client (true), or not (false)
    * @returns {void}
    */
