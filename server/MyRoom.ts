@@ -36,15 +36,19 @@ export class MyRoom extends Room {
   }
 
   /**
+   * @access public
    * @callback onLeave
-   * @description will be called every time new player has left
-   * @param client client that is left
-   * @param options
+   * @description Called when a client (Player) leaves the room.
+   * @override `Colyseus.Room#onLeave`
+   * @param {Client} client Client (Player) that is still left in the room.
+   * @param {boolean} consented Flag to check whether disconnection was initiated by the client (true), or not (false)
+   * @returns {void}
    */
-  onLeave(client: Client, consented: boolean) {
+  public onLeave(client: Client, consented: boolean): void {
+    // Check if the disconnection was NOT initiated by the client.
     if (!consented) {
-      this.broadcast("playerleft", client); // broadcast a message to other player about player leaving the room
-      delete this.state.players[client.sessionId]; // remove it from players object of game state
+      this.broadcast("playerleft", client); // Broadcast a message to other Player about Player leaving the room.
+      delete this.state.players[client.sessionId]; // Remove Player based on its ID from Players object of game state.
     }
   }
 
