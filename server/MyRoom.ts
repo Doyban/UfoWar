@@ -23,16 +23,19 @@ export class MyRoom extends Room {
   }
 
   /**
+   * @access public
    * @callback onJoin
-   * @description will be called every time new player has joined
-   * @param client client that is joined
-   * @param options
+   * @description Called when a client (Player) joins the room.
+   * @override `Colyseus.Room#onJoin`
+   * @param {Client} client Client (Player) that is still left in the room
+   * @param {any} options Game properties
+   * @returns {void}
    */
-  onJoin(client: Client, options: any) {
-    this.state.setGameBoundaries(options);
-    this.state.players[client.sessionId] = new Player();
-    this.state.positionPlayer(client.sessionId);
-    this.notifyOtherPlayers(client);
+  public onJoin(client: Client, options: any): void {
+    this.state.setGameBoundaries(options); // Set game boundaries with given game properties.
+    this.state.players[client.sessionId] = new Player(); // Create Player with associated session ID.
+    this.state.positionPlayer(client.sessionId); // Position Player.
+    this.notifyOtherPlayers(client); // Broadcast a message to other Player about new Player (Enemy) joining the room.
   }
 
   /**
@@ -108,7 +111,7 @@ export class MyRoom extends Room {
 
   /**
    * @function notifyOtherPlayers
-   * @description this function will broadcast a message to other players of new player arrival
+   * @description Broadcast a message to other Player about new Player (Enemy) joining the room.
    * @param client player who is joined
    */
   notifyOtherPlayers(client: Client) {
