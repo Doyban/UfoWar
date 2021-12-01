@@ -113,19 +113,22 @@ export class MyRoom extends Room {
   }
 
   /**
-   * @function notifyOtherPlayers
+   * @access public
    * @description Broadcast a message to other Player about new Player (Enemy) joining the room.
-   * @param client player who is joined
+   * @function notifyOtherPlayers
+   * @param {Client} client Client (Player) that is still left in the room
+   * @returns {void}
    */
-  notifyOtherPlayers(client: Client) {
+  public notifyOtherPlayers(client: Client): void {
+    // Send a message to all connected clients.
     this.broadcast(
-      EventNames.ENEMY_ADDED,
+      EventNames.ENEMY_ADDED, // Broadcast "ENEMY_ADDED" event (message).
       {
-        client: client,
-        player: this.state.players[client.sessionId],
+        player: this.state.players[client.sessionId], //  Assign Player to its associated session ID.
+        client: client, // Assign the Player that is still left in the room.
       },
       {
-        except: client,
+        except: client, // Instance not to send the message to.
       }
     );
   }
