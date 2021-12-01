@@ -10,16 +10,19 @@ import { EventNames } from "./utils/EventNames";
  */
 export class MyRoom extends Room {
   /**
+   * @access public
    * @callback onCreate
-   * @param options [any] that are selected while creating the room
+   * @description Called once, when the room is created by the matchmaker.
+   * @override `Colyseus.Room#onCreate`
+   * @returns {void}
    */
-  onCreate(options: any) {
-    this.setState(new State()); // setting a state to the room
-    this.setPatchRate(50);
-    this.maxClients = 2; // lock clients limit to 2
-    this.onMessage("*", this.onMessageFromClient.bind(this)); // listening to all the message from clients
-    this.clock.setInterval(this.gameLoop.bind(this), 16); // game update loo on server
-    this.clock.setInterval(this.astroidAlarm.bind(this), 2000); // time interval between every astroid creation
+  public onCreate(): void {
+    this.clock.setInterval(this.astroidAlarm.bind(this), 2000); // Time interval between every Astroid creation.
+    this.clock.setInterval(this.gameLoop.bind(this), 16); // Game update loop on server.
+    this.maxClients = 2; // Maximum number of clients allowed to connect into the room. When room reaches this limit, it is locked automatically. Unless the room was explicitly locked by you via lock() method, the room will be unlocked as soon as a client disconnects from it.
+    this.onMessage("*", this.onMessageFromClient.bind(this)); // Colyseus' callback that will be called on all room's messages from the server and based on message type update adequate action.
+    this.setPatchRate(50); // Set frequency the patched state should be sent to all clients, default is 50ms (20fps).
+    this.setState(new State()); // Set state of the room.
   }
 
   /**
