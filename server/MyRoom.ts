@@ -86,6 +86,7 @@ export class MyRoom extends Room {
   }
 
   /**
+   * TODO: Is it needed? Can't find any docs about it, only https://docs.colyseus.io/colyseus/server/room/#setsimulationinterval-callback-milliseconds166 refers something "kind of" about it.
    * @function gameLoop
    * @description this function will be invoked every 16ms to keep the state in sync
    */
