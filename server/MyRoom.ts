@@ -17,7 +17,7 @@ export class MyRoom extends Room {
    * @returns {void}
    */
   public onCreate(): void {
-    this.clock.setInterval(this.astroidAlarm.bind(this), 2000); // Time interval between every Astroid creation.
+    this.clock.setInterval(this.createAstroid.bind(this), 2000); // Time interval between every Astroid creation.
     this.clock.setInterval(this.gameLoop.bind(this), 16); // Game update loop on server.
     this.maxClients = 2; // Maximum number of clients allowed to connect into the room. When room reaches this limit, it is locked automatically. Unless the room was explicitly locked by you via lock() method, the room will be unlocked as soon as a client disconnects from it.
     this.onMessage("*", this.onMessageFromClient.bind(this)); // Colyseus' callback that will be called on all room's messages from the server and based on message type update adequate action.
@@ -59,6 +59,35 @@ export class MyRoom extends Room {
   }
 
   /**
+   * @access public
+   * @callback createAstroid
+   * @description Time interval between every Astroid creation.
+   * @returns {void}
+   */
+  public createAstroid(): void {
+    // Show the astroid with 49.999...% probability.
+    if (Math.floor(Math.random()) * 100 < 50) {
+      const speed = Math.floor(Math.random() * 500); // Speed at which Astroid should move.
+      const rotation = Math.floor(Math.random() * 10); // Angle at which Astroid should rotate.
+
+      // Send a message to all connected clients.
+      this.broadcast(
+        EventNames.ASTROID_ADDED, // Broadcast "ASTROID_ADDED" event (message).
+        {
+          x: Math.floor(Math.random() * 1280), // "x" position at which Astroid should render.
+          y: Math.floor(Math.random() * 840), // "y" position at which Astroid should render.
+          rotation: rotation < 1 ? 1 : rotation, // rotation which Astroid should have.
+          // Astroid's scale, sometimes it's bigger, sometimes smaller.
+          scale: {
+            x: Math.random() || 0.25,
+          },
+          speed: speed < 50 ? 75 : speed, // Astroid's speed, sometimes it's faster, sometimes slower.
+        }
+      );
+    }
+  }
+
+  /**
    * @function onMessageFromClient
    * @description this function responsible for listening to all the players messages
    * @param client the client who has sent the message
@@ -91,27 +120,6 @@ export class MyRoom extends Room {
    * @description this function will be invoked every 16ms to keep the state in sync
    */
   gameLoop() {}
-
-  /**
-   * @function astroidAlarm
-   * @description a callbeack to create an astroid
-   */
-  astroidAlarm() {
-    // to make this probabilty of 50 perc
-    if (Math.floor(Math.random()) * 100 < 50) {
-      const speed = Math.floor(Math.random() * 500); // speed at which astroid should move
-      const rotation = Math.floor(Math.random() * 10); // angle at which astroid should rotate
-      this.broadcast(EventNames.ASTROID_ADDED, {
-        x: Math.floor(Math.random() * 1280), // x position at which astroid should render
-        y: Math.floor(Math.random() * 840), // y position at which astroid should render
-        rotation: rotation < 1 ? 1 : rotation,
-        scale: {
-          x: Math.random() || 0.25,
-        },
-        speed: speed < 50 ? 75 : speed,
-      });
-    }
-  }
 
   /**
    * @access public
