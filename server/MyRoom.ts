@@ -20,7 +20,7 @@ export class MyRoom extends Room {
     this.clock.setInterval(this.createAstroid.bind(this), 2000); // Time interval between every Astroid creation.
     this.clock.setInterval(this.gameLoop.bind(this), 16); // Game update loop on server.
     this.maxClients = 2; // Maximum number of clients allowed to connect into the room. When room reaches this limit, it is locked automatically. Unless the room was explicitly locked by you via lock() method, the room will be unlocked as soon as a client disconnects from it.
-    this.onMessage("*", this.onMessageFromClient.bind(this)); // Colyseus' callback that will be called on all room's messages from the server and based on message type update adequate action.
+    this.onMessage("*", this.onMessageFromClient.bind(this)); // Colyseus' callback that will be called on all room's messages from the client and based on message type update adequate action.
     this.setPatchRate(50); // Set frequency the patched state should be sent to all clients, default is 50ms (20fps).
     this.setState(new State()); // Set state of the room.
   }
@@ -88,29 +88,39 @@ export class MyRoom extends Room {
   }
 
   /**
-   * @function onMessageFromClient
-   * @description this function responsible for listening to all the players messages
-   * @param client the client who has sent the message
-   * @param type message type
-   * @param message any payload object that is sent by client
+   * @access public
+   * @callback onMessageFromClient
+   * @description Listens to all room's messages from the client and based on message type update adequate action.
+   * @param {Client} client Client (Player) that sent the message
+   * @param {any} [type] message type
+   * @param {any} [message] message data
+   * @returns {void}
+   * TODO: Check when the code will compile if these parameters have to be in such an order, like in Server.ts.
    */
-  onMessageFromClient(client: Client, type: string | number, message: any) {
+  public onMessageFromClient(
+    client: Client,
+    type: string | number,
+    message: any
+  ): void {
+    // Check if message type is "BULLET".
     if (type === EventNames.BULLET) {
-      //check if message is bullet
-      this.state.fireBullet(client.sessionId, message);
-      // brodcast a message to add bullet object of this client id on all other player worlds
+      this.state.fireBullet(client.sessionId, message); // Fire Bullet from Player with associated session ID.
+
+      // Send a message to all connected clients to add bullet object of this Client ID.
       this.broadcast(type, message, {
-        except: client,
+        except: client, // Instance not to send the message to.
       });
-    } else if (type === EventNames.PLAYER_ROTATE) {
-      //check if message is bullet
-      // broadcast message to rotate a client on other players worlds
+    }
+    // Check if message type is "PLAYER_ROTATE".
+    else if (type === EventNames.PLAYER_ROTATE) {
+      // Send a message to all connected clients to rotate a client of this Client ID.
       this.broadcast(type, message, {
-        except: client,
+        except: client, // Instance not to send the message to.
       });
-    } else {
-      // move player
-      this.state.updatePlayerPosition(client.sessionId, message);
+    }
+    // Case for all other message types.
+    else {
+      this.state.updatePlayerPosition(client.sessionId, message); // Update Player's position.
     }
   }
 
