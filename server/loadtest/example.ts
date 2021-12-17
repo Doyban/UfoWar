@@ -1,3 +1,4 @@
+// Copy/pasted from https://docs.colyseus.io/colyseus/tools/loadtest/.
 import { Room, Client } from "colyseus.js";
 
 export function requestJoinOptions(this: Client, i: number) {
