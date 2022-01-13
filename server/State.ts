@@ -39,15 +39,15 @@ export default class State extends Schema {
    * @description Fire bullet.
    * @function fireBullet
    * @param {string} [playerId] Player's ID
-   * @param {any} [value] Position object to where bullet should be moved to
+   * @param {any} [positionValues] Position object from which bullet should get position values
    * @returns {void}
    */
-  public fireBullet(playerId: string, value: any): void {
+  public fireBullet(playerId: string, positionValues: any): void {
     let bullet: Bullet = new Bullet(); // Create a new bullet.
 
     // Update position properties of the bullet.
-    bullet.x = value.x;
-    bullet.y = value.y;
+    bullet.x = positionValues.x;
+    bullet.y = positionValues.y;
 
     this.players[playerId].bullets.push(bullet); // Push bullet to Player bullets array.
   }
@@ -102,12 +102,12 @@ export default class State extends Schema {
    * @description Update Player's position.
    * @function movePlayer
    * @param {string} [playerId] Player's ID
-   * @param {any} [value] Position object to where Player should be moved to
+   * @param {any} [positionValues] Position object from which Player should get position values and sequenceNumber
    * @returns {void}
    */
-  public updatePlayerPosition(playerId: string, value: any): void {
-    this.players[playerId].lastProcessedInput = value.sequenceNumber;
-    this.players[playerId].x = value.x;
-    this.players[playerId].y = value.y;
+  public updatePlayerPosition(playerId: string, positionValues: any): void {
+    this.players[playerId].lastProcessedInput = positionValues.sequenceNumber;
+    this.players[playerId].x = positionValues.x;
+    this.players[playerId].y = positionValues.y;
   }
 }

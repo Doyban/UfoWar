@@ -149,7 +149,7 @@ export default class Server extends Colyseus.Client {
             this.scene.events.emit(EventNames.PLAYER_ADDED, playerProperties); // Emit "PLAYER_ADDED" event to the scene with Player properties.
             this.isPlayerAdded = true;
           } else {
-            this.correctPositionOfPlayer(element); // Sync Player position with server.
+            this.correctPositionPlayer(element); // Sync Player position with server.
           }
         }
         // The element that's not a Player, therefore that's an Enemy.
@@ -171,12 +171,12 @@ export default class Server extends Colyseus.Client {
 
   /**
    * @access private
-   * @function correctPositionOfPlayer
+   * @function correctPositionPlayer
    * @description Sync player position with server.
    * @param {any} [element] Player state object
    * @returns {void}
    */
-  private correctPositionOfPlayer(element: any): void {
+  private correctPositionPlayer(element: any): void {
     let player = this.players[element.id]; // Get adequate Player based on element's from the state ID.
 
     // Get Player's position.

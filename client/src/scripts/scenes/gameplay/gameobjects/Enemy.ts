@@ -85,9 +85,9 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
    * @returns {void}
    */
   public update(): void {
+    const buffer: Array<any> = this.positionBuffer; // Get the two authoritative positions surrounding the rendering timestamp.
     const now: number = +new Date(); // Get current date.
     const render_timestamp: number = now - 1000.0 / 64; // Set render timestamp.
-    const buffer: Array<any> = this.positionBuffer; // Get the two authoritative positions surrounding the rendering timestamp.
 
     // Drop older positions until the buffer's length is less than 2 and t1 from the buffer has older or same timestamp than "render_timestamp".
     while (buffer.length >= 2 && buffer[1][0] <= render_timestamp) {
